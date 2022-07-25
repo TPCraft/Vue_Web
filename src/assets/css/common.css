@@ -1,0 +1,10 @@
+/* 定义字体 */
+@font-face{
+    font-family: HarmonyOSFont;
+    src: url("https://cdn.tpcraft.cn/Font/HarmonyOS_Sans_SC_Medium.ttf") format("truetype");
+}
+
+/* 应用字体 */
+* {
+    font-family: "HarmonyOSFont";
+}

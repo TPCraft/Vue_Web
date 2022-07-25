@@ -5,19 +5,18 @@ Vue.use(Vuex)
 
 const Store = new Vuex.Store({
   state: {
+    Config: {
+      ApiUrl: "https://develop.tpcraft.cn/"
+    },
     PsssInfo: null
   },
-  getters: {
-
-  },
   mutations: {
-
-  },
-  actions: {
-
-  },
-  modules: {
-
+    Update_Config(State, Data) {
+      State.Config = Data
+    },
+    Update_PassInfo(State, Data) {
+      State.PsssInfo = Data
+    }
   }
 })
 

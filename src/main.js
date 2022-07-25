@@ -7,6 +7,15 @@ import Store from './store'
 import Router from './router'
 import Vuetify from './plugins/vuetify'
 import Axios from 'axios'
+import VueCookies from 'vue-cookies'
+import VueClipboard from 'vue-clipboard2'
+
+/* 应用插件 */
+Vue.use(VueCookies)
+Vue.use(VueClipboard)
+
+/* 自定义 */
+import './assets/css/common.css'
 
 /* Vue设置 */
 Vue.config.productionTip = false
@@ -27,7 +36,6 @@ Router.beforeEach((to, from, next) => {
 })
 
 /* Axios设置 */
-Axios.defaults.withCredentials = true
 Axios.defaults.headers.post['Content-Type'] = "application/json"
 Axios.defaults.headers.get['Content-Type'] = "application/json"
 
