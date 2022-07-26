@@ -36,6 +36,7 @@ Router.beforeEach((to, from, next) => {
 })
 
 /* Axios设置 */
+Axios.defaults.withCredentials = true;
 Axios.defaults.headers.post['Content-Type'] = "application/json"
 Axios.defaults.headers.get['Content-Type'] = "application/json"
 

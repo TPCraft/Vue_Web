@@ -6,7 +6,7 @@
           <v-card>
             <v-card-title>重置密码</v-card-title>
             <v-card-text>
-              <v-stepper v-model="ResetPasswordData.Step">
+              <v-stepper v-model="Step">
                 <v-stepper-header>
                   <v-stepper-step step="1">准备</v-stepper-step>
                   <v-divider></v-divider>
@@ -30,7 +30,7 @@
                       </v-card-subtitle>
                       <v-card-text>
                         <div class="d-flex justify-end">
-                          <v-btn color="primary" @click="ResetPasswordData.Step++">
+                          <v-btn color="primary" @click="Step++">
                             <v-icon>mdi-play</v-icon>
                             <span class="font-weight-medium ml-1">下一步</span>
                           </v-btn>
@@ -99,12 +99,35 @@
                       <v-card-text>
                         <div class="d-flex justify-end">
                           <v-btn
+                              @click="ReSendEmailCode"
+                              :disabled="ReSendEmailCodeBtn.Disabled"
+                              color="primary"
+                              class="mr-2">
+                            <v-icon>mdi-reload</v-icon>
+                            <span class="font-weight-medium ml-1">{{ ReSendEmailCodeBtn.Text }}</span>
+                          </v-btn>
+                          <v-btn
                               @click="ResetPassword_Step2"
                               :disabled="ResetPasswordData.Disabled_Step2"
                               :loading="ResetPasswordData.Disabled_Step2"
                               color="primary">
                             <v-icon>mdi-play</v-icon>
                             <span class="font-weight-medium ml-1">下一步</span>
+                          </v-btn>
+                        </div>
+                      </v-card-text>
+                    </v-card>
+                  </v-stepper-content>
+                  <v-stepper-content step="4">
+                    <v-card>
+                      <v-card-subtitle>
+                        <p>重置密码完成，你现在可以使用新的密码登入通行证。</p>
+                      </v-card-subtitle>
+                      <v-card-text>
+                        <div class="d-flex justify-end">
+                          <v-btn color="primary" to="/Account/Login">
+                            <v-icon>mdi-play</v-icon>
+                            <span class="font-weight-medium ml-1">完成</span>
                           </v-btn>
                         </div>
                       </v-card-text>
@@ -127,8 +150,13 @@ export default {
   name: "ResetPassword",
 
   data: () => ({
+    Step: 1,
+    ReSendEmailCodeBtn: {
+      Disabled: false,
+      Text: "重新发送邮箱验证码",
+      Timer: 60
+    },
     ResetPasswordData: {
-      Step: 1,
       Disabled_Step1: false,
       Disabled_Step2: false,
       Data: {
@@ -147,6 +175,40 @@ export default {
   },
 
   methods: {
+    /* 重新发送邮箱验证码倒计时 */
+    ReSendEmailCode_Timer() {
+      let Timer = window.setInterval(()=> {
+        this.ReSendEmailCodeBtn.Timer--
+        this.ReSendEmailCodeBtn.Text = this.ReSendEmailCodeBtn.Timer + "秒"
+        if (this.ReSendEmailCodeBtn.Timer === 0) {
+          this.ReSendEmailCodeBtn.Disabled = false
+          this.ReSendEmailCodeBtn.Text = "重新发送邮箱验证码"
+          window.clearInterval(Timer)
+        }
+      }, 1000)
+    },
+    /* 重新发送邮箱验证码 */
+    ReSendEmailCode() {
+      this.ReSendEmailCodeBtn.Disabled = true
+      Axios
+          .get(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ReSendEmailCode")
+          .then(Response => (
+              this.CallBack_ReSendEmailCode(Response.data)
+          ))
+    },
+    /* 重新发送邮箱验证码回调 */
+    CallBack_ReSendEmailCode(Data) {
+      /* 检查响应数据 */
+      if (Data.Code === 406) {
+        this.ReSendEmailCodeBtn.Disabled = true
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
+      if (Data.Code === 1023) {
+        this.ReSendEmailCodeBtn.Timer = 60
+        this.ReSendEmailCode_Timer()
+        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
+      }
+    },
     /* 重置密码第一步 */
     ResetPassword_Step1() {
       this.ResetPasswordData.Disabled_Step1 = true
@@ -164,13 +226,40 @@ export default {
         this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
       }
       if (Data.Code === 1023) {
-        this.ResetPasswordData.Step++
+        this.Step++
+        this.ReSendEmailCodeBtn.Disabled = true
+        this.ReSendEmailCode_Timer()
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     },
     /* 重置密码第二步 */
     ResetPassword_Step2() {
-
+      this.ResetPasswordData.Disabled_Step2 = true
+      Axios
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step2)
+          .then(Response => (
+              this.CallBack_ResetPassword_Step2(Response.data)
+          ))
+    },
+    /* 重置密码第一步回调 */
+    CallBack_ResetPassword_Step2(Data) {
+      /* 检查响应数据 */
+      if (Data.Code === 1011) {
+        this.ResetPasswordData.Disabled_Step2 = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
+      if (Data.Code === 1012) {
+        this.ResetPasswordData.Disabled_Step2 = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
+      if (Data.Code === 1013) {
+        this.ResetPasswordData.Disabled_Step2 = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
+      if (Data.Code === 1014) {
+        this.Step++
+        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
+      }
     }
   }
 }
