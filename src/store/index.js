@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 const Store = new Vuex.Store({
   state: {
+    Loading: false,
     Config: {
       ApiUrl: "https://develop.tpcraft.cn/"
     },
@@ -15,6 +16,7 @@ const Store = new Vuex.Store({
       State.Config = Data
     },
     Update_PassInfo(State, Data) {
+      State.Loading = true
       State.PsssInfo = Data
     }
   }

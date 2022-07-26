@@ -246,8 +246,18 @@
       </v-list>
     </v-navigation-drawer>
     <!-- 页面 -->
-    <v-main style="background-color: #E9E9E9">
-      <router-view v-on:Snackbar_Update="Snackbar_Update"/>
+    <v-main
+        v-if="$store.state.Loading === true"
+        style="background-color: #E9E9E9">
+      <router-view v-on:Snackbar_Update="Snackbar_Update"></router-view>
+    </v-main>
+    <v-main
+        v-if="$store.state.Loading === false"
+        style="background-color: #E9E9E9">
+      <v-overlay>
+        <v-progress-circular indeterminate size="64"/>
+        <p>Loading...</p>
+      </v-overlay>
     </v-main>
     <!-- 底部 -->
     <v-footer padless>
@@ -260,7 +270,7 @@
       </v-card>
     </v-footer>
     <!-- 提示框 -->
-    <v-snackbar :color="Snackbar.Color" v-model="Snackbar.Status" timeout="3000" top>
+    <v-snackbar :color="Snackbar.Color" v-model="Snackbar.Status" timeout="3000" top right>
       <v-icon>mdi-alert-octagon</v-icon><span class="ml-2">{{Snackbar.Text}}</span>
     </v-snackbar>
   </v-app>
