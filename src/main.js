@@ -27,6 +27,7 @@ Router.beforeEach((to, from, next) => {
   }
   next()
 })
+/*
 Router.beforeEach((to, from, next) => {
   if (to.matched.length === 0) {
     from.name ? next({ name:from.name }) : next('/')
@@ -34,6 +35,7 @@ Router.beforeEach((to, from, next) => {
     next()
   }
 })
+*/
 
 /* Axios设置 */
 Axios.defaults.withCredentials = true;

@@ -12,6 +12,10 @@
           <v-icon>mdi-home</v-icon>
           <span class="ml-2">首页</span>
         </v-btn>
+        <v-btn text href="https://community.tpcraft.cn/">
+          <v-icon>mdi-forum</v-icon>
+          <span class="ml-2">社区</span>
+        </v-btn>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
@@ -24,26 +28,32 @@
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
-              <v-icon>mdi-cash-multiple</v-icon>
-              <span class="ml-2">先锋币</span>
+              <v-icon>mdi-account-box-multiple</v-icon>
+              <span class="ml-2">互联</span>
             </v-btn>
           </template>
-
+          <v-list>
+            <v-list-item-group>
+              <v-list-item to="/Auth/Game/Login">
+                <v-list-item-avatar>
+                  <v-icon>mdi-gamepad-variant</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>游戏登入</v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-avatar>
+                  <v-icon>mdi-account-network</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>Oauth 应用</v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
         </v-menu>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <v-icon>mdi-text-box</v-icon>
               <span class="ml-2">文档</span>
-            </v-btn>
-          </template>
-
-        </v-menu>
-        <v-menu>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
-              <v-icon>mdi-account-box-multiple</v-icon>
-              <span class="ml-2">互联</span>
             </v-btn>
           </template>
 
@@ -65,20 +75,21 @@
                   <v-list-item-title>登入</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
-              <v-list-item to="/Account/ResetPassword">
-                <v-list-item-icon>
-                  <v-icon>mdi-lock</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title>重置密码</v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
               <v-list-item to="/Account/Register">
                 <v-list-item-icon>
                   <v-icon>mdi-account-plus</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>注册</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              <v-subheader>第三方登入</v-subheader>
+              <v-list-item href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=https://vue.tpcraft.cn/Auth/Login/Steam&openid.realm=https://vue.tpcraft.cn/Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select">
+                <v-list-item-icon>
+                  <v-icon>mdi-steam</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title>Steam</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>
@@ -104,6 +115,9 @@
               </v-list-item-content>
             </v-list-item>
             <v-list-item>
+              <v-list-item-avatar>
+                <v-icon>mdi-flash</v-icon>
+              </v-list-item-avatar>
               <v-list-item-content>
                 <v-list-item-title>等级 Lv.{{ $store.state.PsssInfo.Level.Level }}</v-list-item-title>
                 <v-list-item-subtitle>
@@ -115,6 +129,14 @@
             </v-list-item>
             <v-list>
               <v-list-item-group>
+                <v-list-item>
+                  <v-list-item-icon>
+                    <v-icon>mdi-cash-multiple</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>先锋币</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
                 <v-list-item to="/Account/PassCenter">
                   <v-list-item-icon>
                     <v-icon>mdi-card-account-details</v-icon>
@@ -136,7 +158,7 @@
                     <v-icon>mdi-logout</v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title>登出</v-list-item-title>
+                    <v-list-item-title>登出通行证</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list-item-group>
@@ -165,14 +187,6 @@
                 <v-list-item-title>登入</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item to="/Account/ResetPassword">
-              <v-list-item-icon>
-                <v-icon>mdi-lock</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title>重置密码</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
             <v-list-item to="/Account/Register">
               <v-list-item-icon>
                 <v-icon>mdi-account-plus</v-icon>
@@ -195,6 +209,9 @@
           </v-list-item-content>
         </v-list-item>
         <v-list-item>
+          <v-list-item-avatar>
+            <v-icon>mdi-flash</v-icon>
+          </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>等级 Lv.{{ $store.state.PsssInfo.Level.Level }}</v-list-item-title>
             <v-list-item-subtitle>
@@ -241,6 +258,12 @@
               <v-icon>mdi-home</v-icon>
             </v-list-item-avatar>
             <v-list-item-title>首页</v-list-item-title>
+          </v-list-item>
+          <v-list-item href="https://community.tpcraft.cn/">
+            <v-list-item-avatar>
+              <v-icon>mdi-forum</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-title>社区</v-list-item-title>
           </v-list-item>
         </v-list-item-group>
       </v-list>

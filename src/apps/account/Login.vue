@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-container>
-      <v-row justify="center" class="mt-10">
+      <v-row justify="center">
         <v-col md="6">
           <v-card>
             <v-card-title>登入通行证</v-card-title>
@@ -30,6 +30,31 @@
                 <v-icon>mdi-login</v-icon>
                 <span class="ml-2">登入</span>
               </v-btn>
+              <div class="mt-4">
+                <v-btn text to="/Account/Register">注册通行证</v-btn>
+                <v-btn text class="float-right" to="/Account/ResetPassword">重置密码</v-btn>
+              </div>
+            </v-card-text>
+          </v-card>
+          <v-card class="mt-4">
+            <v-card-title>第三方登入</v-card-title>
+            <v-card-text>
+              <v-list>
+                <v-list-item-group>
+                  <v-row dense>
+                    <v-col md="6">
+                      <v-list-item href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=https://vue.tpcraft.cn/Auth/Login/Steam&openid.realm=https://vue.tpcraft.cn/Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select">
+                        <v-list-item-avatar>
+                          <v-icon>mdi-steam</v-icon>
+                        </v-list-item-avatar>
+                        <v-list-item-content>
+                          <v-list-item-title>Steam</v-list-item-title>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-col>
+                  </v-row>
+                </v-list-item-group>
+              </v-list>
             </v-card-text>
           </v-card>
         </v-col>
@@ -77,7 +102,8 @@ export default {
       /* 检查响应数据 */
       if (Data.Code === 1000) {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-        this.$cookies.set("Token", Data.Data.Token, "7d", "/")
+        this.$cookies.remove("Token", "/", "tpcraft.cn")
+        this.$cookies.remove("flarum_remember", "/", "tpcraft.cn")
         this.$cookies.set("Token", Data.Data.Token, "7d", "/", "tpcraft.cn")
         this.$cookies.set("flarum_remember", Data.Data.CommunityToken, "7d", "/", "tpcraft.cn")
         setTimeout(() => (window.location.href = "/Account/PassCenter"), 3000)

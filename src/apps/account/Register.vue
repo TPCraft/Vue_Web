@@ -4,7 +4,7 @@
       <v-row justify="center">
         <v-col md="10">
           <v-card>
-            <v-card-title>重置密码</v-card-title>
+            <v-card-title>注册通行证</v-card-title>
             <v-card-text>
               <v-stepper v-model="Step">
                 <v-stepper-header>
@@ -20,7 +20,7 @@
                   <v-stepper-content step="1">
                     <v-card-subtitle>
                       <p>
-                        1.重置已知通行证用户名、邮箱或绑定通行证的QQ的通行证密码。
+                        1.准备一个QQ号、@qq.com的邮箱。
                         <br/>
                         2.我们会向你发送一封带有邮箱验证码的邮件，如果你没有收到，请检查你的邮箱的垃圾邮件。
                       </p>
@@ -36,20 +36,41 @@
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <v-card-text>
-                      <v-text-field
-                          v-model="ResetPasswordData.Data.Step1.Pass"
-                          outlined persistent-hint
-                          label="通行证"
-                          hint="用户名 / 邮箱 / QQ"
-                          prepend-inner-icon="mdi-card-account-details"
-                      ></v-text-field>
+                      <v-row>
+                        <v-col md="4">
+                          <v-text-field
+                              v-model="RegisterData.Data.Step1.Username"
+                              outlined persistent-hint
+                              label="用户名"
+                              hint="用户名不少于3位字符，且只能使用大小写字母、数字、下划线"
+                              prepend-inner-icon="mdi-account"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col md="4">
+                          <v-text-field
+                              v-model="RegisterData.Data.Step1.Qq"
+                              outlined persistent-hint
+                              label="Qq"
+                              prepend-inner-icon="mdi-qqchat"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col md="4">
+                          <v-text-field
+                              v-model="RegisterData.Data.Step1.Email"
+                              outlined persistent-hint
+                              label="邮箱"
+                              hint="仅限@qq.com"
+                              prepend-inner-icon="mdi-email"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
                     </v-card-text>
                     <v-card-text>
                       <div class="d-flex justify-end">
                         <v-btn
-                            @click="ResetPassword_Step1"
-                            :disabled="ResetPasswordData.Disabled_Step1"
-                            :loading="ResetPasswordData.Disabled_Step1"
+                            @click="Register_Step1"
+                            :disabled="RegisterData.Disabled_Step1"
+                            :loading="RegisterData.Disabled_Step1"
                             color="primary">
                           <v-icon>mdi-play</v-icon>
                           <span class="font-weight-medium ml-1">下一步</span>
@@ -62,7 +83,7 @@
                       <v-row>
                         <v-col md="4">
                           <v-text-field
-                              v-model="ResetPasswordData.Data.Step2.Password"
+                              v-model="RegisterData.Data.Step2.Password"
                               outlined persistent-hint
                               label="密码"
                               type="password"
@@ -72,7 +93,7 @@
                         </v-col>
                         <v-col md="4">
                           <v-text-field
-                              v-model="ResetPasswordData.Data.Step2.RePassword"
+                              v-model="RegisterData.Data.Step2.RePassword"
                               outlined hide-details
                               label="确认密码"
                               type="password"
@@ -81,7 +102,7 @@
                         </v-col>
                         <v-col md="4">
                           <v-text-field
-                              v-model="ResetPasswordData.Data.Step2.EmailCode"
+                              v-model="RegisterData.Data.Step2.EmailCode"
                               outlined hide-details
                               label="邮箱验证码"
                               prepend-inner-icon="mdi-xml"
@@ -100,9 +121,9 @@
                           <span class="font-weight-medium ml-1">{{ ReSendEmailCodeBtn.Text }}</span>
                         </v-btn>
                         <v-btn
-                            @click="ResetPassword_Step2"
-                            :disabled="ResetPasswordData.Disabled_Step2"
-                            :loading="ResetPasswordData.Disabled_Step2"
+                            @click="Register_Step2"
+                            :disabled="RegisterData.Disabled_Step2"
+                            :loading="RegisterData.Disabled_Step2"
                             color="primary">
                           <v-icon>mdi-play</v-icon>
                           <span class="font-weight-medium ml-1">下一步</span>
@@ -112,7 +133,7 @@
                   </v-stepper-content>
                   <v-stepper-content step="4">
                     <v-card-subtitle>
-                      <p>重置密码完成，你现在可以使用新的密码登入通行证。</p>
+                      <p>注册完成，你现在可以使用新注册的账户登入通行证。</p>
                     </v-card-subtitle>
                     <v-card-text>
                       <div class="d-flex justify-end">
@@ -137,7 +158,7 @@
 import Axios from "axios";
 
 export default {
-  name: "ResetPassword",
+  name: "Register",
 
   data: () => ({
     Step: 1,
@@ -146,11 +167,11 @@ export default {
       Text: "重新发送邮箱验证码",
       Timer: 60
     },
-    ResetPasswordData: {
+    RegisterData: {
       Disabled_Step1: false,
       Disabled_Step2: false,
       Data: {
-        Step1: {Step: 1, Pass: null},
+        Step1: {Step: 1, Username: null, Qq: null, Email: null},
         Step2: {Step: 2, Password: null, RePassword: null, EmailCode: null},
       }
     }
@@ -191,7 +212,7 @@ export default {
       /* 检查响应数据 */
       if (Data.Code === 406) {
         this.ReSendEmailCodeBtn.Disabled = true
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
       }
       if (Data.Code === 1023) {
         this.ReSendEmailCodeBtn.Timer = 60
@@ -199,20 +220,20 @@ export default {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     },
-    /* 重置密码第一步 */
-    ResetPassword_Step1() {
-      this.ResetPasswordData.Disabled_Step1 = true
+    /* 注册第一步 */
+    Register_Step1() {
+      this.RegisterData.Disabled_Step1 = true
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step1)
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/Register", this.RegisterData.Data.Step1)
           .then(Response => (
-              this.CallBack_ResetPassword_Step1(Response.data)
+              this.CallBack_Register_Step1(Response.data)
           ))
     },
-    /* 重置密码第一步回调 */
-    CallBack_ResetPassword_Step1(Data) {
+    /* 注册第一步回调 */
+    CallBack_Register_Step1(Data) {
       /* 检查响应数据 */
-      if (Data.Code === 1020) {
-        this.ResetPasswordData.Disabled_Step1 = false
+      if (Data.Code === 1005 || Data.Code === 1006 || Data.Code === 1007 || Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010) {
+        this.RegisterData.Disabled_Step1 = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }
       if (Data.Code === 1023) {
@@ -222,27 +243,27 @@ export default {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     },
-    /* 重置密码第二步 */
-    ResetPassword_Step2() {
-      this.ResetPasswordData.Disabled_Step2 = true
+    /* 注册第二步 */
+    Register_Step2() {
+      this.RegisterData.Disabled_Step2 = true
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step2)
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/Register", this.RegisterData.Data.Step2)
           .then(Response => (
-              this.CallBack_ResetPassword_Step2(Response.data)
+              this.CallBack_Register_Step2(Response.data)
           ))
     },
-    /* 重置密码第二步回调 */
-    CallBack_ResetPassword_Step2(Data) {
+    /* 注册第二步回调 */
+    CallBack_Register_Step2(Data) {
       /* 检查响应数据 */
-      if (Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1013) {
-        this.ResetPasswordData.Disabled_Step2 = false
+      if (Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1007 || Data.Code === 1013 || Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010) {
+        this.RegisterData.Disabled_Step2 = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }
-      if (Data.Code === 1014) {
+      if (Data.Code === 1004) {
         this.Step++
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     }
   }
 }
-</script>
+</script>\

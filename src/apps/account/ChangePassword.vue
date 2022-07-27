@@ -4,7 +4,7 @@
       <v-row justify="center">
         <v-col md="10">
           <v-card>
-            <v-card-title>重置密码</v-card-title>
+            <v-card-title>修改密码</v-card-title>
             <v-card-text>
               <v-stepper v-model="Step">
                 <v-stepper-header>
@@ -12,22 +12,24 @@
                   <v-divider></v-divider>
                   <v-stepper-step step="2">第一步</v-stepper-step>
                   <v-divider></v-divider>
-                  <v-stepper-step step="3">第二步</v-stepper-step>
-                  <v-divider></v-divider>
-                  <v-stepper-step step="4">完成</v-stepper-step>
+                  <v-stepper-step step="3">完成</v-stepper-step>
                 </v-stepper-header>
                 <v-stepper-items>
                   <v-stepper-content step="1">
                     <v-card-subtitle>
                       <p>
-                        1.重置已知通行证用户名、邮箱或绑定通行证的QQ的通行证密码。
+                        1.我们会向你发送一封带有邮箱验证码的邮件，如果你没有收到，请检查你的邮箱的垃圾邮件。
                         <br/>
-                        2.我们会向你发送一封带有邮箱验证码的邮件，如果你没有收到，请检查你的邮箱的垃圾邮件。
+                        2.修改密码后需要使用新的密码重新登入通行证。
                       </p>
                     </v-card-subtitle>
                     <v-card-text>
                       <div class="d-flex justify-end">
-                        <v-btn color="primary" @click="Step++">
+                        <v-btn
+                            @click="ChangePasswordData_Step1"
+                            :disabled="ChangePasswordData.Disabled_Step1"
+                            :loading="ChangePasswordData.Disabled_Step1"
+                            color="primary">
                           <v-icon>mdi-play</v-icon>
                           <span class="font-weight-medium ml-1">下一步</span>
                         </v-btn>
@@ -36,33 +38,10 @@
                   </v-stepper-content>
                   <v-stepper-content step="2">
                     <v-card-text>
-                      <v-text-field
-                          v-model="ResetPasswordData.Data.Step1.Pass"
-                          outlined persistent-hint
-                          label="通行证"
-                          hint="用户名 / 邮箱 / QQ"
-                          prepend-inner-icon="mdi-card-account-details"
-                      ></v-text-field>
-                    </v-card-text>
-                    <v-card-text>
-                      <div class="d-flex justify-end">
-                        <v-btn
-                            @click="ResetPassword_Step1"
-                            :disabled="ResetPasswordData.Disabled_Step1"
-                            :loading="ResetPasswordData.Disabled_Step1"
-                            color="primary">
-                          <v-icon>mdi-play</v-icon>
-                          <span class="font-weight-medium ml-1">下一步</span>
-                        </v-btn>
-                      </div>
-                    </v-card-text>
-                  </v-stepper-content>
-                  <v-stepper-content step="3">
-                    <v-card-text>
                       <v-row>
                         <v-col md="4">
                           <v-text-field
-                              v-model="ResetPasswordData.Data.Step2.Password"
+                              v-model="ChangePasswordData.Data.Step2.Password"
                               outlined persistent-hint
                               label="密码"
                               type="password"
@@ -72,7 +51,7 @@
                         </v-col>
                         <v-col md="4">
                           <v-text-field
-                              v-model="ResetPasswordData.Data.Step2.RePassword"
+                              v-model="ChangePasswordData.Data.Step2.RePassword"
                               outlined hide-details
                               label="确认密码"
                               type="password"
@@ -81,7 +60,7 @@
                         </v-col>
                         <v-col md="4">
                           <v-text-field
-                              v-model="ResetPasswordData.Data.Step2.EmailCode"
+                              v-model="ChangePasswordData.Data.Step2.EmailCode"
                               outlined hide-details
                               label="邮箱验证码"
                               prepend-inner-icon="mdi-xml"
@@ -100,9 +79,9 @@
                           <span class="font-weight-medium ml-1">{{ ReSendEmailCodeBtn.Text }}</span>
                         </v-btn>
                         <v-btn
-                            @click="ResetPassword_Step2"
-                            :disabled="ResetPasswordData.Disabled_Step2"
-                            :loading="ResetPasswordData.Disabled_Step2"
+                            @click="ChangePasswordData_Step2"
+                            :disabled="ChangePasswordData.Disabled_Step2"
+                            :loading="ChangePasswordData.Disabled_Step2"
                             color="primary">
                           <v-icon>mdi-play</v-icon>
                           <span class="font-weight-medium ml-1">下一步</span>
@@ -110,9 +89,9 @@
                       </div>
                     </v-card-text>
                   </v-stepper-content>
-                  <v-stepper-content step="4">
+                  <v-stepper-content step="3">
                     <v-card-subtitle>
-                      <p>重置密码完成，你现在可以使用新的密码登入通行证。</p>
+                      <p>修改密码完成，请重新登入通行证，你现在可以使用新的密码登入通行证。</p>
                     </v-card-subtitle>
                     <v-card-text>
                       <div class="d-flex justify-end">
@@ -137,7 +116,7 @@
 import Axios from "axios";
 
 export default {
-  name: "ResetPassword",
+  name: "ChangePassword",
 
   data: () => ({
     Step: 1,
@@ -146,11 +125,11 @@ export default {
       Text: "重新发送邮箱验证码",
       Timer: 60
     },
-    ResetPasswordData: {
+    ChangePasswordData: {
       Disabled_Step1: false,
       Disabled_Step2: false,
       Data: {
-        Step1: {Step: 1, Pass: null},
+        Step1: {Step: 1},
         Step2: {Step: 2, Password: null, RePassword: null, EmailCode: null},
       }
     }
@@ -158,9 +137,9 @@ export default {
 
   created() {
     /* 检查登入状态 */
-    if (this.$store.state.PsssInfo !== null) {
+    if (this.$store.state.PsssInfo === null) {
       this.$router.push("/Account/PassCenter")
-      this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: "已登入通行证"})
+      this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
   },
 
@@ -199,22 +178,18 @@ export default {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     },
-    /* 重置密码第一步 */
-    ResetPassword_Step1() {
-      this.ResetPasswordData.Disabled_Step1 = true
+    /* 修改密码第一步 */
+    ChangePasswordData_Step1() {
+      this.ChangePasswordData.Disabled_Step1 = true
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step1)
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ChangePassword", this.ChangePasswordData.Data.Step1)
           .then(Response => (
-              this.CallBack_ResetPassword_Step1(Response.data)
+              this.CallBack_ChangePasswordData_Step1(Response.data)
           ))
     },
-    /* 重置密码第一步回调 */
-    CallBack_ResetPassword_Step1(Data) {
+    /* 修改密码第一步回调 */
+    CallBack_ChangePasswordData_Step1(Data) {
       /* 检查响应数据 */
-      if (Data.Code === 1020) {
-        this.ResetPasswordData.Disabled_Step1 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
       if (Data.Code === 1023) {
         this.Step++
         this.ReSendEmailCodeBtn.Disabled = true
@@ -222,17 +197,17 @@ export default {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     },
-    /* 重置密码第二步 */
-    ResetPassword_Step2() {
-      this.ResetPasswordData.Disabled_Step2 = true
+    /* 修改密码第二步 */
+    ChangePasswordData_Step2() {
+      this.ChangePasswordData.Disabled_Step2 = true
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step2)
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ChangePassword", this.ChangePasswordData.Data.Step2)
           .then(Response => (
-              this.CallBack_ResetPassword_Step2(Response.data)
+              this.CallBack_ChangePasswordData_Step2(Response.data)
           ))
     },
-    /* 重置密码第二步回调 */
-    CallBack_ResetPassword_Step2(Data) {
+    /* 修改密码第二步回调 */
+    CallBack_ChangePasswordData_Step2(Data) {
       /* 检查响应数据 */
       if (Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1013) {
         this.ResetPasswordData.Disabled_Step2 = false
@@ -240,6 +215,7 @@ export default {
       }
       if (Data.Code === 1014) {
         this.Step++
+        setTimeout(() => (window.location.href = "/Account/Login"), 3000)
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     }

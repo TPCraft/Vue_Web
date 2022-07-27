@@ -1,0 +1,406 @@
+<template>
+  <div>
+    <v-container>
+      <v-card>
+        <v-card-title>通行证中心</v-card-title>
+        <v-card-text>
+          <v-card>
+            <v-card-text>
+              <v-tabs v-model="Tab" color="primary" centered icons-and-text grow>
+                <v-tab href="#Tab-1">
+                  信息
+                  <v-icon>mdi-card-account-details</v-icon>
+                </v-tab>
+                <v-tab href="#Tab-2">
+                  第三方
+                  <v-icon>mdi-contacts</v-icon>
+                </v-tab>
+                <v-tab href="#Tab-3">
+                  设置
+                  <v-icon>mdi-cog</v-icon>
+                </v-tab>
+              </v-tabs>
+              <v-tabs-items v-model="Tab">
+                <v-tab-item value="Tab-1">
+                  <v-card-text>
+                    <v-alert
+                        v-if="$store.state.PsssInfo.QqVerify === '0'"
+                        type="warning">
+                      通行证QQ未验证</v-alert>
+                    <v-alert
+                        v-if="$store.state.PsssInfo.Ban.Ban === '1'"
+                        type="error">
+                      通行证封禁中</v-alert>
+                    <v-alert
+                        v-if="$store.state.PsssInfo.Ban.Ban === '0' && $store.state.PsssInfo.QqVerify === '1'"
+                        type="success">
+                      通行证正常</v-alert>
+                    <v-row no-gutters>
+                      <v-col cols="12" md="6">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-img :src="$store.state.PsssInfo.AvatarUrl"></v-img>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>#{{ $store.state.PsssInfo.Uid }} {{ $store.state.PsssInfo.Username }}</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Email }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-barcode-scan</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>UUID</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Uuid }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.Uuid">
+                                  <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
+                                </v-btn>
+                              </template>
+                              <span>复制</span>
+                            </v-tooltip>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-flash</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>等级</v-list-item-title>
+                            <v-list-item-subtitle>Lv.{{ $store.state.PsssInfo.Level.Level }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-flash</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>EXP</v-list-item-title>
+                            <v-list-item-subtitle>
+                              <v-progress-linear :value="($store.state.PsssInfo.Level.Exp / $store.state.PsssInfo.Level.NextLevelExp) * 100" height="20">
+                                {{ $store.state.PsssInfo.Level.Exp }} / {{ $store.state.PsssInfo.Level.NextLevelExp }}
+                              </v-progress-linear>
+                            </v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-cancel</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>封禁</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Ban.Ban === "0" ? "未封禁" : "封禁中" }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                          <v-list-item-action v-if="$store.state.PsssInfo.Ban.Ban === '1'">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on">
+                                  <v-icon class="error--text">mdi-alert-octagon</v-icon>
+                                </v-btn>
+                              </template>
+                              封禁中
+                            </v-tooltip>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-key</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>访问密钥</v-list-item-title>
+                            <v-list-item-subtitle>{{ Desensitization($store.state.PsssInfo.AccessKey, 4, 4) }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                          <v-list-item-action>
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.AccessKey">
+                                  <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
+                                </v-btn>
+                              </template>
+                              <span>复制</span>
+                            </v-tooltip>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-account-multiple</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>用户组</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Group == "0" ? "普通用户" : ($store.state.PsssInfo.Group == "1" ? "超级管理员" : ($store.state.PsssInfo.Group == "2" ? "二级管理员" : "一级管理员")) }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-cash-multiple</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>先锋币</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Coin }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-timelapse</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>注册日期</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.RegisterDate }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-ip</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>注册IP</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.RegisterIp }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-timelapse</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>最后在线</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.LastOnlineDate }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-ip</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>最后在线IP</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.LastOnlineIp }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-tab-item>
+                <v-tab-item value="Tab-2">
+                  <v-card-text>
+                    <v-alert type="info">第三方账户30分钟同步一次</v-alert>
+                    <v-row dense>
+                      <v-col cols="12" md="6">
+                        <v-card>
+                          <v-card-title>
+                            <v-avatar size="32">
+                              <v-icon>mdi-qqchat</v-icon>
+                            </v-avatar>
+                            <span class="font-weight-light ml-2">QQ</span>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-list-item>
+                              <v-list-item-avatar>
+                                <v-img :src="$store.state.PsssInfo.Qq.AvatarUrl"></v-img>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>{{ $store.state.PsssInfo.Qq.Username }}</v-list-item-title>
+                                <v-list-item-subtitle>{{ $store.state.PsssInfo.Qq.Qq }}</v-list-item-subtitle>
+                              </v-list-item-content>
+                              <v-list-item-action>
+                                <v-tooltip bottom>
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.Qq.Qq">
+                                      <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
+                                    </v-btn>
+                                  </template>
+                                  <span>复制QQ</span>
+                                </v-tooltip>
+                              </v-list-item-action>
+                              <v-list-item-action v-if="$store.state.PsssInfo.QqVerify === '0'">
+                                <v-tooltip bottom>
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on">
+                                      <v-icon class="error--text">mdi-alert-octagon</v-icon>
+                                    </v-btn>
+                                  </template>
+                                  <span>未验证(点击验证)</span>
+                                </v-tooltip>
+                              </v-list-item-action>
+                            </v-list-item>
+                          </v-card-text>
+                        </v-card>
+                      </v-col>
+                      <v-col cols="12" md="6">
+                        <v-card>
+                          <v-card-title>
+                            <v-avatar size="32">
+                              <v-icon>mdi-steam</v-icon>
+                            </v-avatar>
+                            <span class="font-weight-light ml-2">Steam</span>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-list-item>
+                              <v-list-item-avatar>
+                                <v-img v-if="$store.state.PsssInfo.Steam.Id !== null" :src="$store.state.PsssInfo.Steam.AvatarUrl"></v-img>
+                                <v-icon v-if="$store.state.PsssInfo.Steam.Id === null">mdi-steam</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>{{ $store.state.PsssInfo.Steam.Id === null ? "未绑定" : $store.state.PsssInfo.Steam.Username }}</v-list-item-title>
+                                <v-list-item-subtitle>{{ $store.state.PsssInfo.Steam.Id === null ? "未绑定" : $store.state.PsssInfo.Steam.Id }}</v-list-item-subtitle>
+                              </v-list-item-content>
+                              <v-list-item-action v-if="$store.state.PsssInfo.Steam.Id === null">
+                                <v-tooltip bottom>
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on" @click="BindSteam">
+                                      <v-icon>mdi-connection</v-icon>
+                                    </v-btn>
+                                  </template>
+                                  <span>绑定Steam</span>
+                                </v-tooltip>
+                              </v-list-item-action>
+                              <v-list-item-action v-if="$store.state.PsssInfo.Steam.Id !== null">
+                                <v-tooltip bottom>
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.Steam.Id">
+                                      <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
+                                    </v-btn>
+                                  </template>
+                                  <span>复制Steam</span>
+                                </v-tooltip>
+                              </v-list-item-action>
+                              <v-list-item-action v-if="$store.state.PsssInfo.Steam.Id !== null">
+                                <v-tooltip bottom>
+                                  <template v-slot:activator="{ on, attrs }">
+                                    <v-btn icon v-bind="attrs" v-on="on" :href="$store.state.PsssInfo.Steam.ProfileUrl" target="_blank">
+                                      <v-icon>mdi-web</v-icon>
+                                    </v-btn>
+                                  </template>
+                                  <span>前往Steam个人资料</span>
+                                </v-tooltip>
+                              </v-list-item-action>
+                            </v-list-item>
+                          </v-card-text>
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                  </v-card-text>
+                </v-tab-item>
+                <v-tab-item value="Tab-3">
+                  <v-card-text>
+                    <v-list>
+                      <v-list-item-group>
+                        <v-row dense>
+                          <v-col cols="12" md="6">
+                            <v-list-item @click="ResetAccessKey">
+                              <v-list-item-avatar>
+                                <v-icon>mdi-reload</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>重置访问密钥</v-list-item-title>
+                                <v-list-item-subtitle></v-list-item-subtitle>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-col>
+                          <v-col cols="12" md="6">
+                            <v-list-item to="/Account/ChangePassword">
+                              <v-list-item-avatar>
+                                <v-icon>mdi-lock</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>修改密码</v-list-item-title>
+                                <v-list-item-subtitle></v-list-item-subtitle>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-col>
+                        </v-row>
+                      </v-list-item-group>
+                    </v-list>
+                  </v-card-text>
+                </v-tab-item>
+              </v-tabs-items>
+            </v-card-text>
+          </v-card>
+        </v-card-text>
+      </v-card>
+    </v-container>
+  </div>
+</template>
+
+<script>
+import Axios from "axios";
+
+export default {
+  name: "PassCenter",
+
+  data: () => ({
+    Tab: null
+  }),
+
+  created() {
+    /* 检查登入状态 */
+    if (this.$store.state.PsssInfo === null) {
+      this.$router.push("/Account/Login")
+      this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
+    }
+  },
+
+  methods: {
+    /* 去敏操作 */
+    Desensitization(String = "", Start, End) {
+      var Length = String.length - Start - End;
+      var xing = '';
+      for (var i = 0; i < Length; i++) {
+        xing += "*";
+      }
+      return String.substring(0, Start) + xing + String.substring(String.length - End);
+    },
+    /* 绑定Steam */
+    BindSteam() {
+      var Window
+      if (navigator.userAgent.match(/(Mobile|Android|Tablet)/)) {
+        Window = window.open("")
+        Window.open()
+      } else {
+        var Top = (window.screen.availHeight - 30 - 800) / 2
+        var Left = (window.screen.availWidth - 10 - 1000) / 2
+        Window = window.open("https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=https://vue.tpcraft.cn/Auth/Bind/Steam&openid.realm=https://vue.tpcraft.cn/Auth/Bind/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select", "Steam 绑定 - 互联 | TPCraft 时代先锋", "top=" + Top + ",left=" + Left + ",width=1000,height=800")
+        Window.open()
+      }
+    },
+    /* 重置访问密钥 */
+    ResetAccessKey() {
+      Axios
+          .get(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/ResetAccessKey")
+          .then(Response => (
+              this.CallBack_ResetAccessKey(Response.data)
+          ))
+    },
+    /* 重置访问密钥回调 */
+    CallBack_ResetAccessKey(Data) {
+      if (Data.Code === 1017) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
+      }
+    }
+  }
+}
+</script>
