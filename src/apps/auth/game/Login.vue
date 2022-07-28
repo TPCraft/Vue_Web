@@ -7,15 +7,18 @@
         <v-card-text>
           <v-row>
             <v-col md="12" v-if="Data === null">
-              <p class="text-center">暂无登入请求</p>
+              <v-alert type="info">暂无登入请求</v-alert>
             </v-col>
             <v-col
                 v-for="(Data, I) in Data"
                 :key="I"
                 md="4">
               <v-card>
-                <v-card-title>#{{ Data.Id }}</v-card-title>
-                <v-card-subtitle>{{ Data.Game }} - #{{ Data.Server }}</v-card-subtitle>
+                <v-card-title>#{{ Data.Id }} - {{ Data.Username }}</v-card-title>
+                <v-card-subtitle>
+                  {{ Data.Game }} - #{{ Data.Server }}
+                </v-card-subtitle>
+                <v-card-subtitle></v-card-subtitle>
                 <v-card-text>
                   请在 <span class="error--text">{{ (Date.parse(new Date(Data.ExpiredDate)) - Date.parse(new Date())) / 1000 }}</span> 秒内完成登入
                 </v-card-text>
@@ -23,16 +26,16 @@
                   <v-spacer></v-spacer>
                   <v-btn
                       @click="Cancel(Data.Id)"
-                      :disabled="Disabled_Cancel"
-                      :loading="Disabled_Cancel"
+                      :disabled="Disabled"
+                      :loading="Disabled"
                       color="warning">
                     <v-icon>mdi-cancel</v-icon>
                     <span class="ml-2">取消</span>
                   </v-btn>
                   <v-btn
                       @click="Login(Data.Id)"
-                      :disabled="Disabled_Login"
-                      :loading="Disabled_Login"
+                      :disabled="Disabled"
+                      :loading="Disabled"
                       color="success" >
                     <v-icon>mdi-login</v-icon>
                     <span class="ml-2">登入</span>
@@ -41,6 +44,7 @@
               </v-card>
             </v-col>
           </v-row>
+          <v-pagination v-model="Page" :length="PageTotal" class="mt-2"></v-pagination>
         </v-card-text>
       </v-card>
     </v-container>
@@ -55,9 +59,9 @@ export default {
 
   data: () => ({
     Data: null,
-    Disabled_Login: false,
-    Disabled_Cancel: false,
-    Page: 1
+    Disabled: false,
+    Page: 1,
+    PageTotal: 1
   }),
 
   created() {
@@ -81,11 +85,14 @@ export default {
     },
     /* 登入列表回调 */
     CallBack_LoginList(Data) {
+      if (Data.Data !== null) {
+        this.PageTotal = Math.ceil(Data.Data[0].Total / 9)
+      }
       this.Data = Data.Data
     },
     /* 登入 */
     Login(Id) {
-      this.Disabled_Login = true
+      this.Disabled = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Game/Login", {Id: Id})
           .then(Response => (
@@ -95,13 +102,13 @@ export default {
     /* 登入回调 */
     CallBack_Login(Data) {
       if (Data.Code === 4002) {
-        this.Disabled_Login = false
+        this.Disabled = false
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     },
     /* 取消登入 */
     Cancel(Id) {
-      this.Disabled_Cancel = true
+      this.Disabled = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Game/Cancel", {Id: Id})
           .then(Response => (
@@ -111,7 +118,7 @@ export default {
     /* 登入回调 */
     CallBack_Cancel(Data) {
       if (Data.Code === 4003) {
-        this.Disabled_Cancel = false
+        this.Disabled = false
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }
     }

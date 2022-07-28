@@ -12,7 +12,7 @@
             <v-card-text v-if="Code === 1015">
               <v-alert type="success">{{ Text }}</v-alert>
             </v-card-text>
-            <v-card-text v-else>
+            <v-card-text v-if="Code === 1016 || Code === 1028">
               <v-alert type="warning">{{ Text }}</v-alert>
             </v-card-text>
           </v-card>

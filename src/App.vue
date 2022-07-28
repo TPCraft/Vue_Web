@@ -18,7 +18,7 @@
         </v-btn>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
+            <v-btn text v-bind="attrs" v-on="on" to="/InDevelopment">
               <v-icon>mdi-server</v-icon>
               <span class="ml-2">服务器</span>
             </v-btn>
@@ -40,7 +40,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title>游戏登入</v-list-item-title>
               </v-list-item>
-              <v-list-item>
+              <v-list-item to="/InDevelopment">
                 <v-list-item-avatar>
                   <v-icon>mdi-account-network</v-icon>
                 </v-list-item-avatar>
@@ -51,7 +51,7 @@
         </v-menu>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on">
+            <v-btn text v-bind="attrs" v-on="on" to="/InDevelopment">
               <v-icon>mdi-text-box</v-icon>
               <span class="ml-2">文档</span>
             </v-btn>
@@ -129,20 +129,20 @@
             </v-list-item>
             <v-list>
               <v-list-item-group>
-                <v-list-item>
-                  <v-list-item-icon>
-                    <v-icon>mdi-cash-multiple</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                    <v-list-item-title>先锋币</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
                 <v-list-item to="/Account/PassCenter">
                   <v-list-item-icon>
                     <v-icon>mdi-card-account-details</v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
                     <v-list-item-title>通行证中心</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item to="/Pay/Coin">
+                  <v-list-item-icon>
+                    <v-icon>mdi-cash-multiple</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title>先锋币</v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
                 <v-list-item to="/Account/ChangePassword">
@@ -229,6 +229,14 @@
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>通行证中心</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item to="/Pay/Coin">
+              <v-list-item-icon>
+                <v-icon>mdi-cash-multiple</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>先锋币</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
             <v-list-item to="/Account/ChangePassword">

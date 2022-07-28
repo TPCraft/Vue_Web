@@ -39,7 +39,7 @@
                   <v-stepper-content step="2">
                     <v-card-text>
                       <v-row>
-                        <v-col md="4">
+                        <v-col cols="12" md="4">
                           <v-text-field
                               v-model="ChangePasswordData.Data.Step2.Password"
                               outlined persistent-hint
@@ -49,7 +49,7 @@
                               prepend-inner-icon="mdi-lock"
                           ></v-text-field>
                         </v-col>
-                        <v-col md="4">
+                        <v-col cols="12" md="4">
                           <v-text-field
                               v-model="ChangePasswordData.Data.Step2.RePassword"
                               outlined hide-details
@@ -58,7 +58,7 @@
                               prepend-inner-icon="mdi-lock"
                           ></v-text-field>
                         </v-col>
-                        <v-col md="4">
+                        <v-col cols="12" md="4">
                           <v-text-field
                               v-model="ChangePasswordData.Data.Step2.EmailCode"
                               outlined hide-details
@@ -122,7 +122,7 @@ export default {
     Step: 1,
     ReSendEmailCodeBtn: {
       Disabled: false,
-      Text: "重新发送邮箱验证码",
+      Text: "重发验证码",
       Timer: 60
     },
     ChangePasswordData: {
@@ -151,7 +151,7 @@ export default {
         this.ReSendEmailCodeBtn.Text = this.ReSendEmailCodeBtn.Timer + "秒"
         if (this.ReSendEmailCodeBtn.Timer === 0) {
           this.ReSendEmailCodeBtn.Disabled = false
-          this.ReSendEmailCodeBtn.Text = "重新发送邮箱验证码"
+          this.ReSendEmailCodeBtn.Text = "重发验证码"
           window.clearInterval(Timer)
         }
       }, 1000)

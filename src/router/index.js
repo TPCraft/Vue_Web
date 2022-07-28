@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import InDevelopment from '../views/InDevelopment'
+
 import Account_Login from '../apps/account/Login'
 import Account_LoginOut from '../apps/account/LoginOut'
 import Account_ResetPassword from '../apps/account/ResetPassword'
@@ -13,6 +15,8 @@ import Auth_Login_Steam from '../apps/auth/login/Steam'
 import Auth_Game_Login from '../apps/auth/game/Login'
 import Auth_Oauth_Authorize from '../apps/auth/oauth/Authorize'
 
+import Pay_Coin from '../apps/pay/Coin'
+
 
 Vue.use(VueRouter)
 
@@ -20,6 +24,11 @@ const Routes = [
   {
     path: '/',
     meta: {title: "TPCraft 时代先锋"}
+  },
+  {
+    path: '/InDevelopment',
+    component: InDevelopment,
+    meta: {title: "开发中 - TPCraft 时代先锋"}
   },
   {
     path: '/Account/PassCenter',
@@ -72,8 +81,9 @@ const Routes = [
     meta: {title: "授权第三方 - Oauth | TPCraft 时代先锋"}
   },
   {
-    path: '/Pay',
-    meta: {title: "支付 | TPCraft 时代先锋"}
+    path: '/Pay/Coin',
+    component: Pay_Coin,
+    meta: {title: "先锋币 - 支付 | TPCraft 时代先锋"}
   },
   {
     path: '/Doc',
