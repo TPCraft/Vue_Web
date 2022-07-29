@@ -39,11 +39,11 @@
             <v-col cols="12" md="6">
               <v-text-field
                   outlined persistent-hint readonly
-                  v-model="Amount * $store.state.PsssInfo.Level.Level * 0.02"
+                  :value="LevelAmount"
                   label="等级激励"
                   type="num"
                   prepend-inner-icon="mdi-cash-multiple"
-                  hint="充值数额 * 等级 * 2%"></v-text-field>
+                  hint="四舍五入(充值数额 * 等级 * 2%)"></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-btn
@@ -104,6 +104,15 @@
                       <v-list-item-content>
                         <v-list-item-title>金额</v-list-item-title>
                         <v-list-item-subtitle>{{ Data.Amount / 100 }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item>
+                      <v-list-item-avatar>
+                        <v-icon>mdi-cash-multiple</v-icon>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>等级激励</v-list-item-title>
+                        <v-list-item-subtitle>{{ Data.LevelAmount === null ? "无" : Data.LevelAmount }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item>
@@ -240,6 +249,12 @@ export default {
         this.Disabled = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }
+    }
+  },
+
+  computed: {
+    LevelAmount() {
+      return Math.round(this.Amount * this.$store.state.PsssInfo.Level.Level * 0.02)
     }
   }
 }

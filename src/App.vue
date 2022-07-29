@@ -44,7 +44,7 @@
                 <v-list-item-avatar>
                   <v-icon>mdi-account-network</v-icon>
                 </v-list-item-avatar>
-                <v-list-item-title>Oauth 应用</v-list-item-title>
+                <v-list-item-title>Oauth Client</v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -174,10 +174,9 @@
         </v-btn>
       </div>
     </v-app-bar>
-    <v-navigation-drawer absolute app temporary v-model="Drawer">
-      <v-subheader>通行证</v-subheader>
-      <div v-if="$store.state.PsssInfo === null">
-        <v-list>
+    <v-navigation-drawer app temporary v-model="Drawer">
+      <v-list>
+        <div v-if="$store.state.PsssInfo === null">
           <v-list-item-group>
             <v-list-item to="/Account/Login">
               <v-list-item-icon>
@@ -195,7 +194,6 @@
                 <v-list-item-title>注册</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-divider></v-divider>
             <v-subheader>第三方登入</v-subheader>
             <v-list-item :href="'https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.realm=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select'">
               <v-list-item-icon>
@@ -206,32 +204,30 @@
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
-        </v-list>
-      </div>
-      <div v-if="$store.state.PsssInfo !== null">
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-img :src="$store.state.PsssInfo.AvatarUrl" />
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>#{{ $store.state.PsssInfo.Uid }} {{ $store.state.PsssInfo.Username }}</v-list-item-title>
-            <v-list-item-subtitle>{{ $store.state.PsssInfo.Email }}</v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-avatar>
-            <v-icon>mdi-flash</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>等级 Lv.{{ $store.state.PsssInfo.Level.Level }}</v-list-item-title>
-            <v-list-item-subtitle>
-              <v-progress-linear :value="($store.state.PsssInfo.Level.Exp / $store.state.PsssInfo.Level.NextLevelExp) * 100" height="20">
-                {{ $store.state.PsssInfo.Level.Exp }} / {{ $store.state.PsssInfo.Level.NextLevelExp }}
-              </v-progress-linear>
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list>
+        </div>
+        <div v-if="$store.state.PsssInfo !== null">
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-img :src="$store.state.PsssInfo.AvatarUrl" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>#{{ $store.state.PsssInfo.Uid }} {{ $store.state.PsssInfo.Username }}</v-list-item-title>
+              <v-list-item-subtitle>{{ $store.state.PsssInfo.Email }}</v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item>
+            <v-list-item-avatar>
+              <v-icon>mdi-flash</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title>等级 Lv.{{ $store.state.PsssInfo.Level.Level }}</v-list-item-title>
+              <v-list-item-subtitle>
+                <v-progress-linear :value="($store.state.PsssInfo.Level.Exp / $store.state.PsssInfo.Level.NextLevelExp) * 100" height="20">
+                  {{ $store.state.PsssInfo.Level.Exp }} / {{ $store.state.PsssInfo.Level.NextLevelExp }}
+                </v-progress-linear>
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
           <v-list-item-group>
             <v-list-item to="/Account/PassCenter">
               <v-list-item-icon>
@@ -262,26 +258,67 @@
                 <v-icon>mdi-logout</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>登出</v-list-item-title>
+                <v-list-item-title>登出通行证</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
-        </v-list>
-      </div>
-      <v-divider></v-divider>
-      <v-list>
+        </div>
+        <v-divider></v-divider>
         <v-list-item-group>
           <v-list-item to="/">
-            <v-list-item-avatar>
+            <v-list-item-icon>
               <v-icon>mdi-home</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title>首页</v-list-item-title>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>首页</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
           <v-list-item href="https://community.tpcraft.cn/">
-            <v-list-item-avatar>
+            <v-list-item-icon>
               <v-icon>mdi-forum</v-icon>
-            </v-list-item-avatar>
-            <v-list-item-title>社区</v-list-item-title>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>社区</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item to="/InDevelopment">
+            <v-list-item-icon>
+              <v-icon>mdi-server</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>服务器</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-group no-action prepend-icon="mdi-account-box-multiple">
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>互联</v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item to="/Auth/Game/Login">
+              <v-list-item-icon>
+                <v-icon>mdi-gamepad-variant</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>游戏登入</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item to="/InDevelopment">
+              <v-list-item-icon>
+                <v-icon>mdi-account-network</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Oauth Client</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+          <v-list-item to="/InDevelopment">
+            <v-list-item-icon>
+              <v-icon>mdi-text-box</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>文档</v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
       </v-list>
