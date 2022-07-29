@@ -10,10 +10,13 @@
               <v-alert type="info">{{ Text }}</v-alert>
               <v-progress-linear indeterminate></v-progress-linear>
             </v-card-text>
+            <v-card-text v-if="Code === 400 || Code === 500">
+              <v-alert type="error">{{ Text }}</v-alert>
+            </v-card-text>
             <v-card-text v-if="Code === 1000">
               <v-alert type="success">{{ Text }}</v-alert>
             </v-card-text>
-            <v-card-text v-if="Code === 1027 || Code === 1020">
+            <v-card-text v-if="Code === 1020 || Code === 1027">
               <v-alert type="warning">{{ Text }}</v-alert>
             </v-card-text>
           </v-card>
@@ -56,6 +59,14 @@ export default {
     /* 登入回调 */
     CallBack_Login(Data) {
       /* 检查响应数据 */
+      if (Data.Code === 400) {
+        this.Code = Data.Code
+        this.Text = Data.Message
+      }
+      if (Data.Code === 500) {
+        this.Code = Data.Code
+        this.Text = Data.Message
+      }
       if (Data.Code === 1000) {
         this.Code = Data.Code
         this.Text = Data.Message
@@ -64,7 +75,8 @@ export default {
         this.$cookies.set("Token", Data.Data.Token, "7d", "/", "tpcraft.cn")
         this.$cookies.set("flarum_remember", Data.Data.CommunityToken, "7d", "/", "tpcraft.cn")
         setTimeout(() => (window.location.href = "/Account/PassCenter"), 3000)
-      } else {
+      }
+      if (Data.Code === 1020 || Data.Code === 1027) {
         this.Code = Data.Code
         this.Text = Data.Message
       }

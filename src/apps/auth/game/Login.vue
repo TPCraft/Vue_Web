@@ -101,6 +101,14 @@ export default {
     },
     /* 登入回调 */
     CallBack_Login(Data) {
+      if (Data.Code === 500) {
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
+      if (Data.Code === 4001) {
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
       if (Data.Code === 4002) {
         this.Disabled = false
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
@@ -117,6 +125,14 @@ export default {
     },
     /* 登入回调 */
     CallBack_Cancel(Data) {
+      if (Data.Code === 500) {
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
+      if (Data.Code === 4001) {
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
       if (Data.Code === 4003) {
         this.Disabled = false
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})

@@ -199,12 +199,12 @@ export default {
     PayWindow(Id) {
       var PayPage
       if (navigator.userAgent.match(/(Mobile|Android|Tablet)/)) {
-        PayPage = window.open("https://tpcraft.cn/Pay?Id=" + Id)
+        PayPage = window.open(this.$store.state.Config.AppUrl + "Pay/PayOrder?Id=" + Id)
         PayPage.open()
       } else {
         var Top = (window.screen.availHeight - 30 - 800) / 2
         var Left = (window.screen.availWidth - 10 - 1000) / 2
-        PayPage = window.open("https://tpcraft.cn/Pay?Id=" + Id, null, "top=" + Top + ",left=" + Left + ",width=1000,height=800")
+        PayPage = window.open(this.$store.state.Config.AppUrl + "Pay/PayOrder?Id=" + Id, null, "top=" + Top + ",left=" + Left + ",width=1000,height=800")
         PayPage.open()
       }
     },
@@ -220,34 +220,19 @@ export default {
     /* 微信支付回调 */
     CallBack_WeChat(Data) {
       /* 检查响应数据 */
+      if (Data.Code === 500) {
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
       if (Data.Code === 2000) {
         this.Disabled = false
         this.PayWindow(Data.Data.Id)
-      } else {
+      }
+      if (Data.Code === 2007 || Data.Code === 2008) {
         this.Disabled = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }
-    },
-    /* 支付宝支付 */
-    AliPay() {
-      this.Disabled = true
-      Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Pay/AliPay", {Amount: this.Amount})
-          .then(Response => (
-              this.CallBack_AliPay(Response.data)
-          ))
-    },
-    /* 支付宝支付回调 */
-    CallBack_AliPay(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 2000) {
-        this.Disabled = false
-        this.PayWindow(Data.Data.Id)
-      } else {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-    },
+    }
   }
 }
 </script>

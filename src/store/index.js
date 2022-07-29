@@ -7,6 +7,7 @@ const Store = new Vuex.Store({
   state: {
     Loading: false,
     Config: {
+      AppUrl: "http://localhost:8080/",
       ApiUrl: "https://develop.tpcraft.cn/"
     },
     PsssInfo: null

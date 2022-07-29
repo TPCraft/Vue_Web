@@ -9,6 +9,9 @@
               <v-alert type="info">{{ Text }}</v-alert>
               <v-progress-linear indeterminate></v-progress-linear>
             </v-card-text>
+            <v-card-text v-if="Code === 400 || Code === 500">
+              <v-alert type="error">{{ Text }}</v-alert>
+            </v-card-text>
             <v-card-text v-if="Code === 1015">
               <v-alert type="success">{{ Text }}</v-alert>
             </v-card-text>
@@ -55,11 +58,20 @@ export default {
     /* 绑定回调 */
     CallBack_Bind(Data) {
       /* 检查响应数据 */
+      if (Data.Code === 400) {
+        this.Code = Data.Code
+        this.Text = Data.Message
+      }
+      if (Data.Code === 500) {
+        this.Code = Data.Code
+        this.Text = Data.Message
+      }
       if (Data.Code === 1015) {
         this.Code = Data.Code
         this.Text = Data.Message
         setTimeout(() => (close()), 3000)
-      } else {
+      }
+      if (Data.Code === 1016|| Data.Code === 1028) {
         this.Code = Data.Code
         this.Text = Data.Message
       }

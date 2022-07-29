@@ -397,6 +397,9 @@ export default {
     },
     /* 重置访问密钥回调 */
     CallBack_ResetAccessKey(Data) {
+      if (Data.Code === 500) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
       if (Data.Code === 1017) {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
       }

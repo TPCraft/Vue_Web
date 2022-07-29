@@ -6,9 +6,6 @@
         <v-card-text v-if="Code === null">
           <v-alert type="info">{{ Text }}</v-alert>
         </v-card-text>
-        <v-card-text v-if="Code === 3004 || Code === 3005">
-          <v-alert type="warning">{{ Text }}</v-alert>
-        </v-card-text>
         <v-card-text v-if="Code === 200">
           <v-row justify="center">
             <v-col md="5">
@@ -64,6 +61,12 @@
             </v-col>
           </v-row>
         </v-card-text>
+        <v-card-text v-if="Code === 400 || Code === 500">
+          <v-alert type="error">{{ Text }}</v-alert>
+        </v-card-text>
+        <v-card-text v-if="Code === 3004 || Code === 3005">
+          <v-alert type="warning">{{ Text }}</v-alert>
+        </v-card-text>
       </v-card>
     </v-container>
   </div>
@@ -105,7 +108,12 @@ export default {
       if (Data.Code === 200) {
         this.Code = Data.Code
         this.Data = Data.Data
-      } else{
+      }
+      if (Data.Code === 400 || Data.Code === 500) {
+        this.Code = Data.Code
+        this.Text = Data.Message
+      }
+      if (Data.Code === 3004 || Data.Code === 3005) {
         this.Code = Data.Code
         this.Text = Data.Message
       }

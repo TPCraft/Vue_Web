@@ -43,7 +43,7 @@
                 <v-list-item-group>
                   <v-row dense>
                     <v-col md="6">
-                      <v-list-item href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=https://vue.tpcraft.cn/Auth/Login/Steam&openid.realm=https://vue.tpcraft.cn/Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select">
+                      <v-list-item :href="'https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.realm=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select'">
                         <v-list-item-avatar>
                           <v-icon>mdi-steam</v-icon>
                         </v-list-item-avatar>
@@ -100,6 +100,9 @@ export default {
     /* 登入回调 */
     CallBack_Login(Data) {
       /* 检查响应数据 */
+      if (Data.Code === 500) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
       if (Data.Code === 1000) {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
         this.$cookies.remove("Token", "/", "tpcraft.cn")

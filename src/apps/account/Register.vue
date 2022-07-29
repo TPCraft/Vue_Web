@@ -211,8 +211,7 @@ export default {
     CallBack_ReSendEmailCode(Data) {
       /* 检查响应数据 */
       if (Data.Code === 406) {
-        this.ReSendEmailCodeBtn.Disabled = true
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }
       if (Data.Code === 1023) {
         this.ReSendEmailCodeBtn.Timer = 60
@@ -232,6 +231,10 @@ export default {
     /* 注册第一步回调 */
     CallBack_Register_Step1(Data) {
       /* 检查响应数据 */
+      if (Data.Code === 500) {
+        this.RegisterData.Disabled_Step1 = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
       if (Data.Code === 1005 || Data.Code === 1006 || Data.Code === 1007 || Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010) {
         this.RegisterData.Disabled_Step1 = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
@@ -255,7 +258,11 @@ export default {
     /* 注册第二步回调 */
     CallBack_Register_Step2(Data) {
       /* 检查响应数据 */
-      if (Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1007 || Data.Code === 1013 || Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010) {
+      if (Data.Code === 500) {
+        this.RegisterData.Disabled_Step2 = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
+      if (Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010 || Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1013) {
         this.RegisterData.Disabled_Step2 = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }

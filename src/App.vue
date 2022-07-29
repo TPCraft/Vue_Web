@@ -84,7 +84,7 @@
                 </v-list-item-content>
               </v-list-item>
               <v-subheader>第三方登入</v-subheader>
-              <v-list-item href="https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=https://vue.tpcraft.cn/Auth/Login/Steam&openid.realm=https://vue.tpcraft.cn/Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select">
+              <v-list-item :href="'https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.realm=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select'">
                 <v-list-item-icon>
                   <v-icon>mdi-steam</v-icon>
                 </v-list-item-icon>
@@ -193,6 +193,16 @@
               </v-list-item-icon>
               <v-list-item-content>
                 <v-list-item-title>注册</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider></v-divider>
+            <v-subheader>第三方登入</v-subheader>
+            <v-list-item :href="'https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.realm=' + $store.state.Config.AppUrl + 'Auth/Login/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select'">
+              <v-list-item-icon>
+                <v-icon>mdi-steam</v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title>Steam</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
