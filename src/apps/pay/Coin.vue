@@ -27,7 +27,7 @@
                 </v-list-item-content>
               </v-list-item>
             </v-col>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="6">
               <v-text-field
                   outlined persistent-hint
                   v-model="Amount"
@@ -35,6 +35,15 @@
                   type="num"
                   prepend-inner-icon="mdi-cash-multiple"
                   hint="最小数额为1，最大数额为100000"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field
+                  outlined persistent-hint readonly
+                  v-model="Amount * $store.state.PsssInfo.Level.Level * 0.02"
+                  label="等级激励"
+                  type="num"
+                  prepend-inner-icon="mdi-cash-multiple"
+                  hint="充值数额 * 等级 * 2%"></v-text-field>
             </v-col>
             <v-col cols="12" md="6">
               <v-btn
@@ -49,7 +58,6 @@
             </v-col>
             <v-col cols="12" md="6">
               <v-btn
-                  @click="AliPay"
                   disabled="disabled"
                   block
                   color="primary">

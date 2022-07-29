@@ -9,10 +9,12 @@ import Vuetify from './plugins/vuetify'
 import Axios from 'axios'
 import VueCookies from 'vue-cookies'
 import VueClipboard from 'vue-clipboard2'
+import VueQrcode from 'vue-qrcode-directive'
 
 /* 应用插件 */
 Vue.use(VueCookies)
 Vue.use(VueClipboard)
+Vue.use(VueQrcode)
 
 /* 自定义 */
 import './assets/css/common.css'

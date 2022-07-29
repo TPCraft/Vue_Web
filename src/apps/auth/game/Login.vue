@@ -18,7 +18,6 @@
                 <v-card-subtitle>
                   {{ Data.Game }} - #{{ Data.Server }}
                 </v-card-subtitle>
-                <v-card-subtitle></v-card-subtitle>
                 <v-card-text>
                   请在 <span class="error--text">{{ (Date.parse(new Date(Data.ExpiredDate)) - Date.parse(new Date())) / 1000 }}</span> 秒内完成登入
                 </v-card-text>

@@ -68,7 +68,39 @@
                           </v-list-item-action>
                         </v-list-item>
                       </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-checkbox-multiple-marked</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>签到</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Signin.Signin === '0' ? "今日未签到" : "今日已签到" }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                          <v-list-item-action v-if="$store.state.PsssInfo.Signin.Signin === '0'">
+                            <v-tooltip bottom>
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn icon v-bind="attrs" v-on="on" @click="Signin">
+                                  <v-icon>mdi-square-edit-outline</v-icon>
+                                </v-btn>
+                              </template>
+                              <span>签到</span>
+                            </v-tooltip>
+                          </v-list-item-action>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
+                        <v-list-item>
+                          <v-list-item-avatar>
+                            <v-icon>mdi-checkbox-multiple-marked</v-icon>
+                          </v-list-item-avatar>
+                          <v-list-item-content>
+                            <v-list-item-title>已签到天数</v-list-item-title>
+                            <v-list-item-subtitle>{{ $store.state.PsssInfo.Signin.Day }} 天</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                      <v-col cols="12" md="3">
                         <v-list-item>
                           <v-list-item-avatar>
                             <v-icon>mdi-flash</v-icon>
@@ -79,7 +111,7 @@
                           </v-list-item-content>
                         </v-list-item>
                       </v-col>
-                      <v-col cols="12" md="6">
+                      <v-col cols="12" md="3">
                         <v-list-item>
                           <v-list-item-avatar>
                             <v-icon>mdi-flash</v-icon>
@@ -373,6 +405,27 @@ export default {
         xing += "*";
       }
       return String.substring(0, Start) + xing + String.substring(String.length - End);
+    },
+    /* 签到 */
+    Signin() {
+      Axios
+          .post(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/Signin", {Mode: "Api"})
+          .then(Response => (
+              this.CallBack_Signin(Response.data)
+          ))
+    },
+    /* 签到回调 */
+    CallBack_Signin(Data) {
+      /* 检查响应数据 */
+      if (Data.Code === 500) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
+      if (Data.Code === 1018) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
+      if (Data.Code === 1021) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message + "，本次签到获得 " + Data.Data.Exp + " Exp"})
+      }
     },
     /* 绑定Steam */
     BindSteam() {
