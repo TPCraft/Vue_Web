@@ -145,10 +145,13 @@ export default {
 
   computed: {
     ExpiredDate() {
-      let H = parseInt((Date.parse(new Date(this.Data.ExpiredDate)) - Date.parse(new Date())) / 1000 / 60 / 60 % 24)
-      let M = parseInt((Date.parse(new Date(this.Data.ExpiredDate)) - Date.parse(new Date())) / 1000 / 60 % 24)
-      let S = parseInt((Date.parse(new Date(this.Data.ExpiredDate)) - Date.parse(new Date())) / 1000 % 60)
-      return H + "时" + M + "分" + S + "秒"
+      const ExpiredDate = (new Date(this.Data.ExpiredDate) - new Date()) / 1000
+      let Result = parseInt(ExpiredDate)
+      let H = Math.floor(Result / 3600) < 10 ? '0' + Math.floor(Result / 3600) : Math.floor(Result / 3600)
+      let M = Math.floor((Result / 60 % 60)) < 10 ? '0' + Math.floor((Result / 60 % 60)) : Math.floor((Result / 60 % 60))
+      let S = Math.floor((Result % 60)) < 10 ? '0' + Math.floor((Result % 60)) : Math.floor((Result % 60))
+      Result = `${H}时${M}分${S}秒`
+      return Result
     }
   }
 }
