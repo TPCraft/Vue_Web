@@ -16,6 +16,10 @@
           <v-icon>mdi-forum</v-icon>
           <span class="ml-2">社区</span>
         </v-btn>
+        <v-btn text href="https://mcskin.tpcraft.cn/">
+          <v-icon>mdi-palette</v-icon>
+          <span class="ml-2">皮肤站</span>
+        </v-btn>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on" to="/InDevelopment">
@@ -279,6 +283,14 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>社区</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item href="https://mcskin.tpcraft.cn/">
+            <v-list-item-icon>
+              <v-icon>mdi-palette</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>皮肤站</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item to="/InDevelopment">
