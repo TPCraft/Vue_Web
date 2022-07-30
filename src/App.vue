@@ -40,11 +40,11 @@
                 </v-list-item-avatar>
                 <v-list-item-title>游戏登入</v-list-item-title>
               </v-list-item>
-              <v-list-item to="/InDevelopment">
+              <v-list-item to="/Auth/Oauth/Client">
                 <v-list-item-avatar>
                   <v-icon>mdi-account-network</v-icon>
                 </v-list-item-avatar>
-                <v-list-item-title>Oauth Client</v-list-item-title>
+                <v-list-item-title>OauthClient</v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -303,12 +303,12 @@
                 <v-list-item-title>游戏登入</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
-            <v-list-item to="/InDevelopment">
+            <v-list-item to="/Auth/Oauth/Client">
               <v-list-item-icon>
                 <v-icon>mdi-account-network</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title>Oauth Client</v-list-item-title>
+                <v-list-item-title>OauthClient</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-group>

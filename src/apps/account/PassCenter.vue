@@ -271,7 +271,7 @@
                               <v-list-item-action v-if="$store.state.PsssInfo.QqVerify === '0'">
                                 <v-tooltip bottom>
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on">
+                                    <v-btn icon v-bind="attrs" v-on="on" @click="QqVerify">
                                       <v-icon class="error--text">mdi-alert-octagon</v-icon>
                                     </v-btn>
                                   </template>
@@ -374,6 +374,38 @@
           </v-card>
         </v-card-text>
       </v-card>
+      <v-dialog
+          v-model="QqVerifyDialog"
+          persistent
+          max-width="600px">
+        <v-card>
+          <v-card-title>QQ验证</v-card-title>
+          <v-card-text>
+            <v-text-field
+                :value="QqVerifyData.VerifyCode"
+                outlined hide-details readonly
+                label="验证码"
+                prepend-inner-icon="mdi-xml"
+            ></v-text-field>
+            <v-text-field
+                :value="QqVerifyData.ExpiredDate"
+                outlined hide-details readonly
+                label="过期时间" class="mt-2"
+                prepend-inner-icon="mdi-timer"
+            ></v-text-field>
+            <p class="mt-2">
+              QQ验证帮助：<a href="https://community.tpcraft.cn/d/32" target="_blank">https://community.tpcraft.cn/d/32</a>
+            </p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="info" @click="QqVerifyDialog = false">
+              <v-icon>mdi-cancel</v-icon>
+              <span class="ml-2">关闭</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -385,7 +417,12 @@ export default {
   name: "PassCenter",
 
   data: () => ({
-    Tab: null
+    Tab: null,
+    QqVerifyDialog: false,
+    QqVerifyData: {
+      VerifyCode: null,
+      ExpiredDate: null
+    }
   }),
 
   created() {
@@ -420,11 +457,28 @@ export default {
       if (Data.Code === 500) {
         this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
       }
-      if (Data.Code === 1018) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
       if (Data.Code === 1021) {
         this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message + "，本次签到获得 " + Data.Data.Exp + " Exp"})
+      }
+    },
+    /* Qq验证 */
+    QqVerify() {
+      Axios
+          .get(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/QqVerify")
+          .then(Response => (
+              this.CallBack_QqVerify(Response.data)
+          ))
+    },
+    /* QQ验证回调 */
+    CallBack_QqVerify(Data) {
+      /* 检查响应数据 */
+      if (Data.Code === 200) {
+        this.QqVerifyData.VerifyCode = Data.Data.VerifyCode
+        this.QqVerifyData.ExpiredDate = Data.Data.ExpiredDate
+        this.QqVerifyDialog = true
+      }
+      if (Data.Code === 500) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
       }
     },
     /* 绑定Steam */

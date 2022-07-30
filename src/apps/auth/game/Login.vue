@@ -7,7 +7,7 @@
         <v-card-text>
           <v-row>
             <v-col md="12" v-if="Data === null">
-              <v-alert type="info">暂无登入请求</v-alert>
+              <v-alert type="info">暂无数据</v-alert>
             </v-col>
             <v-col
                 v-for="(Data, I) in Data"

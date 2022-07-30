@@ -47,7 +47,7 @@
                     </v-col>
                     <v-col md="6">
                       <v-btn
-                          :href="$store.state.Config.ApiUrl + '/Oauth/Authorize?client_id=' + $route.query.ClientId + '&response_type=' + $route.query.ResponseType + '&state=' + $route.query.State"
+                          :href="$store.state.Config.ApiUrl + '/Oauth/Authorize?client_id=' + $route.query.client_id + '&response_type=' + $route.query.response_type + '&state=' + $route.query.state"
                           block
                           color="success">
                         <v-icon>mdi-login</v-icon>
@@ -98,7 +98,7 @@ export default {
     /* 检查Oauth客户端 */
     CheckOauth() {
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Oauth/Check", {ClientId: this.$route.query.ClientId})
+          .post(this.$store.state.Config.ApiUrl + "Oauth/Check", {ClientId: this.$route.query.client_id})
           .then(Response => (
               this.CallBack_CheckOauth(Response.data)
           ))

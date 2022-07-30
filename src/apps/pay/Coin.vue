@@ -73,7 +73,7 @@
         <v-card-text>
           <v-row dense>
             <v-col cols="12" md="12" v-if="Data === null">
-              <v-alert type="info">暂无订单</v-alert>
+              <v-alert type="info">暂无数据</v-alert>
             </v-col>
             <v-expansion-panels>
               <v-col cols="12" md="6" v-for="(Data, I) in Data" :key="I">
@@ -93,10 +93,15 @@
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <v-btn color="info" @click="PayWindow(Data.Id)" v-if="Data.Status === '0'">
-                      <v-icon>mdi-shopping</v-icon>
-                      <v-span class="ml-2">支付</v-span>
-                    </v-btn>
+                    <v-card>
+                      <v-card-subtitle>操作</v-card-subtitle>
+                      <v-card-text>
+                        <v-btn color="info" @click="PayWindow(Data.Id)" v-if="Data.Status === '0'">
+                          <v-icon>mdi-shopping</v-icon>
+                          <v-span class="ml-2">支付</v-span>
+                        </v-btn>
+                      </v-card-text>
+                    </v-card>
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-icon>mdi-currency-cny</v-icon>

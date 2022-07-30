@@ -15,6 +15,7 @@ import Auth_Bind_Steam from '../apps/auth/bind/Steam'
 import Auth_Login_Steam from '../apps/auth/login/Steam'
 import Auth_Game_Login from '../apps/auth/game/Login'
 import Auth_Oauth_Authorize from '../apps/auth/oauth/Authorize'
+import Auth_Oauth_Client from '../apps/auth/oauth/Client'
 
 import Pay_Coin from '../apps/pay/Coin'
 import Pay_PayOrder from '../apps/pay/PayOrder'
@@ -83,9 +84,14 @@ const Routes = [
     meta: {title: "游戏登入 - 互联 | TPCraft 时代先锋"}
   },
   {
+    path: '/Auth/Oauth/Client',
+    component: Auth_Oauth_Client,
+    meta: {title: "ClienOautht - 互联 | TPCraft 时代先锋"}
+  },
+  {
     path: '/Auth/Oauth/Authorize',
     component: Auth_Oauth_Authorize,
-    meta: {title: "授权第三方 - Oauth | TPCraft 时代先锋"}
+    meta: {title: "授权第三方 - 互联 | TPCraft 时代先锋"}
   },
   {
     path: '/Pay/Coin',
