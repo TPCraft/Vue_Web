@@ -93,10 +93,10 @@
                     </template>
                   </v-expansion-panel-header>
                   <v-expansion-panel-content>
-                    <v-card>
+                    <v-card v-if="Data.Status === '0'">
                       <v-card-subtitle>操作</v-card-subtitle>
                       <v-card-text>
-                        <v-btn color="info" @click="PayWindow(Data.Id)" v-if="Data.Status === '0'">
+                        <v-btn color="info" @click="PayWindow(Data.Id)">
                           <v-icon>mdi-shopping</v-icon>
                           <v-span class="ml-2">支付</v-span>
                         </v-btn>
