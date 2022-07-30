@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import InDevelopment from '../views/InDevelopment'
 import Error from '../views/Error'
 
+import Www_Home from '../apps/www/Home'
+
 import Account_Login from '../apps/account/Login'
 import Account_LoginOut from '../apps/account/LoginOut'
 import Account_ResetPassword from '../apps/account/ResetPassword'
@@ -26,6 +28,7 @@ Vue.use(VueRouter)
 const Routes = [
   {
     path: '/',
+    component: Www_Home,
     meta: {title: "TPCraft 时代先锋"}
   },
   {
@@ -101,11 +104,7 @@ const Routes = [
   {
     path: '/Pay/PayOrder',
     component: Pay_PayOrder,
-    meta: {title: "订单 - 支付 | TPCraft 时代先锋"}
-  },
-  {
-    path: '/Doc',
-    meta: {title: "文档 | TPCraft 时代先锋"}
+    meta: {title: "支付订单 - 支付 | TPCraft 时代先锋"}
   }
 ]
 
