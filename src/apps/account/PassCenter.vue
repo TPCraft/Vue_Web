@@ -490,7 +490,7 @@ export default {
       } else {
         var Top = (window.screen.availHeight - 30 - 800) / 2
         var Left = (window.screen.availWidth - 10 - 1000) / 2
-        Window = window.open("https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=" + this.$store.state.Config.AppUrl + "Auth/Bind/Steam&openid.realm=" + this.$store.state.Config.AppUrl + "/Auth/Bind/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select", "Steam 绑定 - 互联 | TPCraft 时代先锋", "top=" + Top + ",left=" + Left + ",width=1000,height=800")
+        Window = window.open("https://steamcommunity.com/openid/login?openid.ns=http://specs.openid.net/auth/2.0&openid.mode=checkid_setup&openid.return_to=" + this.$store.state.Config.AppUrl + "Auth/Bind/Steam&openid.realm=" + this.$store.state.Config.AppUrl + "Auth/Bind/Steam&openid.identity=http://specs.openid.net/auth/2.0/identifier_select&openid.claimed_id=http://specs.openid.net/auth/2.0/identifier_select", "Steam 绑定 - 互联 | TPCraft 时代先锋", "top=" + Top + ",left=" + Left + ",width=1000,height=800")
         Window.open()
       }
     },
