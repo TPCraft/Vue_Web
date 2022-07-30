@@ -212,11 +212,11 @@ export default {
     CallBack_ChangePasswordData_Step2(Data) {
       /* 检查响应数据 */
       if (Data.Code === 500) {
-        this.ResetPasswordData.Disabled_Step2 = false
+        this.ChangePasswordData.Disabled_Step2 = false
         this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
       }
       if (Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1013) {
-        this.ResetPasswordData.Disabled_Step2 = false
+        this.ChangePasswordData.Disabled_Step2 = false
         this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
       }
       if (Data.Code === 1014) {
