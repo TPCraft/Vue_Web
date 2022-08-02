@@ -440,14 +440,7 @@
         <v-card>
           <v-card-title>修改头像</v-card-title>
           <v-card-text class="text-center">
-            <v-file-input
-                @change="PreviewAvatar"
-                persistent-hint
-                accept="image/*"
-                prepend-icon="mdi-file"
-                label="选择文件"
-                hint="图片必须为png、jpg、jpge格式且大小不超过10MB"
-            ></v-file-input>
+            <ImageCutter @cutDown="PreviewAvatar" rate="1:1"/>
             <div v-if="UploadAvatarData.Preview !== null" class="mt-4">
               <p>头像预览</p>
               <v-avatar size="128px">
@@ -510,9 +503,15 @@
 
 <script>
 import Axios from "axios";
+import ImageCutter from "vue-img-cutter";
+
 
 export default {
   name: "PassCenter",
+
+  components: {
+    ImageCutter
+  },
 
   data: () => ({
     Tab: null,
@@ -601,15 +600,8 @@ export default {
     },
     /* 预览头像 */
     PreviewAvatar(File) {
-      if (File) {
-        this.UploadAvatarData.Data = File
-        const _this = this;
-        const Reader = new FileReader()
-        Reader.readAsDataURL(File)
-        Reader.onload = () => {
-          _this.UploadAvatarData.Preview = Reader.result
-        }
-      }
+      this.UploadAvatarData.Data = File.file
+      this.UploadAvatarData.Preview = File.dataURL
     },
     /* 上传头像 */
     UploadAvatar() {
