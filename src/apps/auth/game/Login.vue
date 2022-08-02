@@ -60,7 +60,8 @@ export default {
     Data: null,
     Disabled: false,
     Page: 1,
-    PageTotal: 1
+    PageTotal: 1,
+    Timer: null
   }),
 
   created() {
@@ -70,7 +71,11 @@ export default {
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* 登入列表 */
-    setInterval(this.LoginList, 1000)
+    this.Timer = setInterval(this.LoginList, 1000)
+  },
+
+  destroyed() {
+    window.clearInterval(this.Timer)
   },
 
   methods: {

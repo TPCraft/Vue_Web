@@ -24,15 +24,11 @@
                 <v-tab-item value="Tab-1">
                   <v-card-text>
                     <v-alert
-                        v-if="$store.state.PsssInfo.QqVerify === '0'"
-                        type="warning">
-                      通行证QQ未验证</v-alert>
-                    <v-alert
                         v-if="$store.state.PsssInfo.Ban.Ban === '1'"
                         type="error">
                       通行证封禁中</v-alert>
                     <v-alert
-                        v-if="$store.state.PsssInfo.Ban.Ban === '0' && $store.state.PsssInfo.QqVerify === '1'"
+                        v-if="$store.state.PsssInfo.Ban.Ban === '0'"
                         type="success">
                       通行证正常</v-alert>
                     <v-row no-gutters>
@@ -59,7 +55,9 @@
                           <v-list-item-action>
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
-                                <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.Uuid">
+                                <v-btn
+                                    v-clipboard:copy="$store.state.PsssInfo.Uuid"
+                                    icon v-bind="attrs" v-on="on">
                                   <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
                                 </v-btn>
                               </template>
@@ -80,7 +78,9 @@
                           <v-list-item-action v-if="$store.state.PsssInfo.Signin.Signin === '0'">
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
-                                <v-btn icon v-bind="attrs" v-on="on" @click="Signin">
+                                <v-btn
+                                    @click="Signin"
+                                    icon v-bind="attrs" v-on="on">
                                   <v-icon>mdi-square-edit-outline</v-icon>
                                 </v-btn>
                               </template>
@@ -135,14 +135,16 @@
                             <v-list-item-title>封禁</v-list-item-title>
                             <v-list-item-subtitle>{{ $store.state.PsssInfo.Ban.Ban === "0" ? "未封禁" : "封禁中" }}</v-list-item-subtitle>
                           </v-list-item-content>
-                          <v-list-item-action v-if="$store.state.PsssInfo.Ban.Ban === '1'">
+                          <v-list-item-action>
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
-                                <v-btn icon v-bind="attrs" v-on="on">
-                                  <v-icon class="error--text">mdi-alert-octagon</v-icon>
+                                <v-btn
+                                    @click="BanInfoDialog = true"
+                                    icon v-bind="attrs" v-on="on">
+                                  <v-icon>mdi-information</v-icon>
                                 </v-btn>
                               </template>
-                              封禁中
+                              封禁信息
                             </v-tooltip>
                           </v-list-item-action>
                         </v-list-item>
@@ -159,7 +161,9 @@
                           <v-list-item-action>
                             <v-tooltip bottom>
                               <template v-slot:activator="{ on, attrs }">
-                                <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.AccessKey">
+                                <v-btn
+                                    v-clipboard:copy="$store.state.PsssInfo.AccessKey"
+                                    icon v-bind="attrs" v-on="on">
                                   <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
                                 </v-btn>
                               </template>
@@ -261,7 +265,9 @@
                               <v-list-item-action>
                                 <v-tooltip bottom>
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.Qq.Qq">
+                                    <v-btn
+                                        v-clipboard:copy="$store.state.PsssInfo.Qq.Qq"
+                                        icon v-bind="attrs" v-on="on">
                                       <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
                                     </v-btn>
                                   </template>
@@ -271,11 +277,13 @@
                               <v-list-item-action v-if="$store.state.PsssInfo.QqVerify === '0'">
                                 <v-tooltip bottom>
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on" @click="QqVerify">
-                                      <v-icon class="error--text">mdi-alert-octagon</v-icon>
+                                    <v-btn
+                                        @click="QqVerify"
+                                        icon v-bind="attrs" v-on="on">
+                                      <v-icon>mdi-shield-check</v-icon>
                                     </v-btn>
                                   </template>
-                                  <span>未验证(点击验证)</span>
+                                  <span>点击验证QQ</span>
                                 </v-tooltip>
                               </v-list-item-action>
                             </v-list-item>
@@ -303,7 +311,9 @@
                               <v-list-item-action v-if="$store.state.PsssInfo.Steam.Id === null">
                                 <v-tooltip bottom>
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on" @click="BindSteam">
+                                    <v-btn
+                                        @click="BindSteam"
+                                        icon v-bind="attrs" v-on="on">
                                       <v-icon>mdi-connection</v-icon>
                                     </v-btn>
                                   </template>
@@ -313,7 +323,9 @@
                               <v-list-item-action v-if="$store.state.PsssInfo.Steam.Id !== null">
                                 <v-tooltip bottom>
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="$store.state.PsssInfo.Steam.Id">
+                                    <v-btn
+                                        v-clipboard:copy="$store.state.PsssInfo.Steam.Id"
+                                        icon v-bind="attrs" v-on="on">
                                       <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
                                     </v-btn>
                                   </template>
@@ -323,7 +335,10 @@
                               <v-list-item-action v-if="$store.state.PsssInfo.Steam.Id !== null">
                                 <v-tooltip bottom>
                                   <template v-slot:activator="{ on, attrs }">
-                                    <v-btn icon v-bind="attrs" v-on="on" :href="$store.state.PsssInfo.Steam.ProfileUrl" target="_blank">
+                                    <v-btn
+                                        :href="$store.state.PsssInfo.Steam.ProfileUrl"
+                                        icon v-bind="attrs" v-on="on"
+                                        target="_blank">
                                       <v-icon>mdi-web</v-icon>
                                     </v-btn>
                                   </template>
@@ -343,13 +358,22 @@
                       <v-list-item-group>
                         <v-row dense>
                           <v-col cols="12" md="6">
+                            <v-list-item @click="ChangeAvatarDialog = true">
+                              <v-list-item-avatar>
+                                <v-icon>mdi-image-edit</v-icon>
+                              </v-list-item-avatar>
+                              <v-list-item-content>
+                                <v-list-item-title>修改头像</v-list-item-title>
+                              </v-list-item-content>
+                            </v-list-item>
+                          </v-col>
+                          <v-col cols="12" md="6">
                             <v-list-item @click="ResetAccessKey">
                               <v-list-item-avatar>
                                 <v-icon>mdi-reload</v-icon>
                               </v-list-item-avatar>
                               <v-list-item-content>
                                 <v-list-item-title>重置访问密钥</v-list-item-title>
-                                <v-list-item-subtitle></v-list-item-subtitle>
                               </v-list-item-content>
                             </v-list-item>
                           </v-col>
@@ -360,7 +384,6 @@
                               </v-list-item-avatar>
                               <v-list-item-content>
                                 <v-list-item-title>修改密码</v-list-item-title>
-                                <v-list-item-subtitle></v-list-item-subtitle>
                               </v-list-item-content>
                             </v-list-item>
                           </v-col>
@@ -374,6 +397,81 @@
           </v-card>
         </v-card-text>
       </v-card>
+      <v-dialog persistent fullscreen v-model="BanInfoDialog">
+        <v-card>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click="BanInfoDialog = false">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+            <v-toolbar-title>封禁信息</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <v-alert
+                v-if="$store.state.PsssInfo.Ban.History === null"
+                type="info" class="mt-4">
+              暂无数据
+            </v-alert>
+            <v-timeline v-if="$store.state.PsssInfo.Ban.History !== null" dense>
+              <v-slide-x-reverse-transition group hide-on-leave>
+                <v-timeline-item
+                    v-for="(BanInfo, I) in $store.state.PsssInfo.Ban.History" :key="I"
+                    small fill-dot>
+                  <v-card>
+                    <v-card-title>#{{ BanInfo.Id }}</v-card-title>
+                    <v-card-subtitle>
+                      封禁时间 {{ BanInfo.Date }}
+                      <br/>
+                      解封时间 {{ BanInfo.ExpiredDate == "1970-01-01 07:59:59" ? "永久封禁" : BanInfo.ExpiredDate }}
+                    </v-card-subtitle>
+                    <v-card-text>
+                      <h3>{{ BanInfo.Reason }}</h3>
+                    </v-card-text>
+                  </v-card>
+                </v-timeline-item>
+              </v-slide-x-reverse-transition>
+            </v-timeline>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+          v-model="ChangeAvatarDialog"
+          persistent
+          max-width="600px">
+        <v-card>
+          <v-card-title>修改头像</v-card-title>
+          <v-card-text class="text-center">
+            <v-file-input
+                @change="PreviewAvatar"
+                persistent-hint
+                accept="image/*"
+                prepend-icon="mdi-file"
+                label="选择文件"
+                hint="图片必须为png、jpg、jpge格式且大小不超过10MB"
+            ></v-file-input>
+            <div v-if="UploadAvatarData.Preview !== null" class="mt-4">
+              <p>头像预览</p>
+              <v-avatar size="128px">
+                <v-img :src="UploadAvatarData.Preview"/>
+              </v-avatar>
+            </div>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="warning" @click="ChangeAvatarDialog = false, UploadAvatarData.Preview = null">
+              <v-icon>mdi-cancel</v-icon>
+              <span class="ml-2">取消</span>
+            </v-btn>
+            <v-btn
+                @click="UploadAvatar"
+                :disabled="Disabled"
+                :loading="Disabled"
+                color="success">
+              <v-icon>mdi-upload</v-icon>
+              <span class="ml-2">上传</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <v-dialog
           v-model="QqVerifyDialog"
           persistent
@@ -418,7 +516,14 @@ export default {
 
   data: () => ({
     Tab: null,
+    Disabled: false,
+    BanInfoDialog: false,
+    ChangeAvatarDialog: false,
     QqVerifyDialog: false,
+    UploadAvatarData: {
+      Data: null,
+      Preview: null
+    },
     QqVerifyData: {
       VerifyCode: null,
       ExpiredDate: null
@@ -494,6 +599,47 @@ export default {
         Window.open()
       }
     },
+    /* 预览头像 */
+    PreviewAvatar(File) {
+      if (File) {
+        this.UploadAvatarData.Data = File
+        const _this = this;
+        const Reader = new FileReader()
+        Reader.readAsDataURL(File)
+        Reader.onload = () => {
+          _this.UploadAvatarData.Preview = Reader.result
+        }
+      }
+    },
+    /* 上传头像 */
+    UploadAvatar() {
+      this.Disabled = true
+      let UploadData = new FormData()
+      UploadData.append("File", this.UploadAvatarData.Data)
+      Axios
+          .post(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/UploadAvatar", UploadData)
+          .then(Response => (
+              this.CallBack_UploadAvatar(Response.data)
+          ))
+    },
+    /* 上传头像回调 */
+    CallBack_UploadAvatar(Data) {
+      /* 检查响应数据 */
+      if (Data.Code === 500) {
+        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
+      }
+      if (Data.Code === 5000) {
+        this.UploadAvatarData.Data = null
+        this.UploadAvatarData.Preview = null
+        this.ChangeAvatarDialog = false
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
+      }
+      if (Data.Code === 5001 || Data.Code === 5002 || Data.Code === 5003) {
+        this.Disabled = false
+        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
+      }
+    },
     /* 重置访问密钥 */
     ResetAccessKey() {
       Axios
@@ -504,6 +650,7 @@ export default {
     },
     /* 重置访问密钥回调 */
     CallBack_ResetAccessKey(Data) {
+      /* 检查响应数据 */
       if (Data.Code === 500) {
         this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
       }

@@ -71,7 +71,8 @@ export default {
       correctLevel: 2,
       background: "#ffffff",
       foreground: "#000000"
-    }
+    },
+    Timer: null
   }),
 
   created() {
@@ -81,7 +82,11 @@ export default {
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* 订单信息 */
-    setInterval(this.OrderInfo, 1000)
+    this.Timer = setInterval(this.OrderInfo, 1000)
+  },
+
+  destroyed() {
+    window.clearInterval(this.Timer)
   },
 
   methods: {

@@ -22,15 +22,6 @@
         </v-btn>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on" to="/InDevelopment">
-              <v-icon>mdi-server</v-icon>
-              <span class="ml-2">服务器</span>
-            </v-btn>
-          </template>
-
-        </v-menu>
-        <v-menu>
-          <template v-slot:activator="{ on, attrs }">
             <v-btn text v-bind="attrs" v-on="on">
               <v-icon>mdi-account-box-multiple</v-icon>
               <span class="ml-2">互联</span>
@@ -55,12 +46,33 @@
         </v-menu>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn text v-bind="attrs" v-on="on" to="/InDevelopment">
-              <v-icon>mdi-text-box</v-icon>
-              <span class="ml-2">文档</span>
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon>mdi-dots-horizontal</v-icon>
+              <span class="ml-2">其他</span>
             </v-btn>
           </template>
-
+          <v-list>
+            <v-list-item-group>
+              <v-list-item to="/InDevelopment">
+                <v-list-item-avatar>
+                  <v-icon>mdi-text-box</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>文档</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/InDevelopment">
+                <v-list-item-avatar>
+                  <v-icon>mdi-server</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>服务器</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/Account/BanList">
+                <v-list-item-avatar>
+                  <v-icon>mdi-cancel</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>封禁列表</v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
         </v-menu>
         <v-menu v-if="$store.state.PsssInfo === null">
           <template v-slot:activator="{ on, attrs }">
@@ -267,7 +279,7 @@
             </v-list-item>
           </v-list-item-group>
         </div>
-        <v-divider></v-divider>
+        <v-divider class="mt-4 mb-4"></v-divider>
         <v-list-item-group>
           <v-list-item to="/">
             <v-list-item-icon>
@@ -293,14 +305,6 @@
               <v-list-item-title>皮肤站</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item to="/InDevelopment">
-            <v-list-item-icon>
-              <v-icon>mdi-server</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>服务器</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
           <v-list-group no-action prepend-icon="mdi-account-box-multiple">
             <template v-slot:activator>
               <v-list-item-content>
@@ -324,14 +328,31 @@
               </v-list-item-content>
             </v-list-item>
           </v-list-group>
-          <v-list-item to="/InDevelopment">
-            <v-list-item-icon>
-              <v-icon>mdi-text-box</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
+          <v-list-group no-action prepend-icon="mdi-dots-horizontal">
+            <template v-slot:activator>
+              <v-list-item-content>
+                <v-list-item-title>其他</v-list-item-title>
+              </v-list-item-content>
+            </template>
+            <v-list-item to="/InDevelopment">
+              <v-list-item-avatar>
+                <v-icon>mdi-text-box</v-icon>
+              </v-list-item-avatar>
               <v-list-item-title>文档</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+            </v-list-item>
+            <v-list-item to="/InDevelopment">
+              <v-list-item-avatar>
+                <v-icon>mdi-server</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>服务器</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/Account/BanList">
+              <v-list-item-avatar>
+                <v-icon>mdi-cancel</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>封禁列表</v-list-item-title>
+            </v-list-item>
+          </v-list-group>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
@@ -386,7 +407,8 @@ export default {
     Axios.defaults.headers.post['Authorization'] = this.$cookies.get("Token")
     Axios.defaults.headers.get['Authorization'] = this.$cookies.get("Token")
     /* 获取通行证信息 */
-    setInterval(this.PassInfo, 1000)
+    this.PassInfo()
+    setInterval(this.PassInfo, 3000)
   },
 
   methods: {

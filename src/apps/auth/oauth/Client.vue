@@ -233,7 +233,8 @@ export default {
       RedirectUrl: null,
       Name: null,
       Logo: null
-    }
+    },
+    Timer: null
   }),
 
   created() {
@@ -243,7 +244,11 @@ export default {
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* OauthClient列表 */
-    setInterval(this.OauthClientList, 1000)
+    this.Timer = setInterval(this.OauthClientList, 1000)
+  },
+
+  destroyed() {
+    window.clearInterval(this.Timer)
   },
 
   methods: {
