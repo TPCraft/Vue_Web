@@ -12,9 +12,9 @@
           <v-icon>mdi-home</v-icon>
           <span class="ml-2">首页</span>
         </v-btn>
-        <v-btn text href="https://community.tpcraft.cn/">
-          <v-icon>mdi-forum</v-icon>
-          <span class="ml-2">社区</span>
+        <v-btn text href="https://pan.tpcraft.cn/">
+          <v-icon>mdi-nas</v-icon>
+          <span class="ml-2">网盘</span>
         </v-btn>
         <v-btn text href="https://mcskin.tpcraft.cn/">
           <v-icon>mdi-palette</v-icon>
@@ -289,12 +289,12 @@
               <v-list-item-title>首页</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-          <v-list-item href="https://community.tpcraft.cn/">
+          <v-list-item href="https://pan.tpcraft.cn/">
             <v-list-item-icon>
-              <v-icon>mdi-forum</v-icon>
+              <v-icon>mdi-nas</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>社区</v-list-item-title>
+              <v-list-item-title>网盘</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item href="https://mcskin.tpcraft.cn/">

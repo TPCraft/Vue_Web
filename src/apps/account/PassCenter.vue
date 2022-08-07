@@ -440,12 +440,18 @@
         <v-card>
           <v-card-title>修改头像</v-card-title>
           <v-card-text class="text-center">
-            <ImageCutter @cutDown="PreviewAvatar" rate="1:1"/>
-            <div v-if="UploadAvatarData.Preview !== null" class="mt-4">
-              <p>头像预览</p>
-              <v-avatar size="128px">
-                <v-img :src="UploadAvatarData.Preview"/>
-              </v-avatar>
+            <v-file-input @change="SelectFile" accept="image/*" prepend-icon="mdi-file" label="文件"/>
+            <div v-if="UploadAvatarData.Base64 !== null" class="mt-4">
+              <p>头像剪切</p>
+              <v-card height="300">
+                <VueCropper
+                    ref="cropper"
+                    :info="true"
+                    :autoCrop="true"
+                    :fixed="true"
+                    :fixedNumber="[1, 1]"
+                    :img="UploadAvatarData.Base64"></VueCropper>
+              </v-card>
             </div>
           </v-card-text>
           <v-card-actions>
@@ -503,15 +509,10 @@
 
 <script>
 import Axios from "axios";
-import ImageCutter from "vue-img-cutter";
 
 
 export default {
   name: "PassCenter",
-
-  components: {
-    ImageCutter
-  },
 
   data: () => ({
     Tab: null,
@@ -520,8 +521,7 @@ export default {
     ChangeAvatarDialog: false,
     QqVerifyDialog: false,
     UploadAvatarData: {
-      Data: null,
-      Preview: null
+      Base64: null
     },
     QqVerifyData: {
       VerifyCode: null,
@@ -598,21 +598,36 @@ export default {
         Window.open()
       }
     },
-    /* 预览头像 */
-    PreviewAvatar(File) {
-      this.UploadAvatarData.Data = File.file
-      this.UploadAvatarData.Preview = File.dataURL
+    /* 选择文件 */
+    SelectFile(File) {
+      const _this = this
+      const Reader = new FileReader()
+      Reader.readAsDataURL(File)
+      Reader.onload = () => {
+        _this.UploadAvatarData.Base64 = Reader.result
+      }
     },
-    /* 上传头像 */
+    /* 上传文件 */
     UploadAvatar() {
-      this.Disabled = true
-      let UploadData = new FormData()
-      UploadData.append("File", this.UploadAvatarData.Data)
-      Axios
-          .post(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/UploadAvatar", UploadData)
-          .then(Response => (
-              this.CallBack_UploadAvatar(Response.data)
-          ))
+      this.$refs.cropper.getCropData(Data => {
+        this.Disabled = true
+        let UploadData = new FormData()
+        let arr = Data.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        console.log(new File([u8arr], "Avatar.png", { type: mime }))
+        UploadData.append("File", new File([u8arr], "Avatar.png", { type: mime }))
+        Axios
+            .post(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/UploadAvatar", UploadData)
+            .then(Response => (
+                this.CallBack_UploadAvatar(Response.data)
+            ))
+      })
     },
     /* 上传头像回调 */
     CallBack_UploadAvatar(Data) {
