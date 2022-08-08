@@ -6,6 +6,7 @@ import Error from '../views/Error'
 
 import Www_Home from '../apps/www/Home'
 
+import Account_View_Server from '../apps/www/ServerStatus'
 import Account_View_BanList from '../apps/account/view/BanList'
 
 import Account_Login from '../apps/account/Login'
@@ -42,6 +43,11 @@ const Routes = [
     path: '/InDevelopment',
     component: InDevelopment,
     meta: {title: "开发中 - TPCraft 时代先锋"}
+  },
+  {
+    path: '/Server',
+    component: Account_View_Server,
+    meta: {title: "服务器 - TPCraft 时代先锋"}
   },
   {
     path: '/Account/BanList',

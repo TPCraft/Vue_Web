@@ -59,7 +59,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title>文档</v-list-item-title>
               </v-list-item>
-              <v-list-item to="/InDevelopment">
+              <v-list-item to="/Server">
                 <v-list-item-avatar>
                   <v-icon>mdi-server</v-icon>
                 </v-list-item-avatar>
@@ -340,7 +340,7 @@
               </v-list-item-avatar>
               <v-list-item-title>文档</v-list-item-title>
             </v-list-item>
-            <v-list-item to="/InDevelopment">
+            <v-list-item to="/Server">
               <v-list-item-avatar>
                 <v-icon>mdi-server</v-icon>
               </v-list-item-avatar>
