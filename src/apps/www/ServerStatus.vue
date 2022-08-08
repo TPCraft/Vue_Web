@@ -25,12 +25,18 @@ export default {
   name: "ServerStatus",
 
   data: () => ({
-    Data: null
+    Data: null,
+    Timer: null
   }),
 
   created() {
     /* 获取服务器信息 */
     this.ServerStatus()
+    this.Timer = setInterval(this.ServerStatus, 3000)
+  },
+
+  destroyed() {
+    window.clearInterval(this.Timer)
   },
 
   methods: {
@@ -123,30 +129,34 @@ export default {
             {
               name: 'CPU',
               type: 'line',
-              data: CpuUsed.reverse(),
               yAxisIndex: 0,
-              symbol: 'none'
+              data: CpuUsed.reverse(),
+              symbol: 'none',
+              smooth: true
             },
             {
               name: 'MEM',
               type: 'line',
               yAxisIndex: 0,
               data: MemUsed.reverse(),
-              symbol: 'none'
+              symbol: 'none',
+              smooth: true,
             },
             {
               name: '上行',
               type: 'line',
               yAxisIndex: 1,
               data: NetworkUp.reverse(),
-              symbol: 'none'
+              symbol: 'none',
+              smooth: true,
             },
             {
               name: '下行',
               type: 'line',
               yAxisIndex: 1,
               data: NetworkDown.reverse(),
-              symbol: 'none'
+              symbol: 'none',
+              smooth: true,
             }
           ]
         })
