@@ -28,6 +28,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background: url('https://cdn.tpcraft.cn/Images/Card/Card_1.png') no-repeat center center;
+  background: url("https://cdn.tpcraft.cn/Images/Card/Card_1.png") no-repeat center center;
 }
 </style>

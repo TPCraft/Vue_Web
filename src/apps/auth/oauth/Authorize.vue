@@ -64,7 +64,7 @@
         <v-card-text v-if="Code === 400 || Code === 500">
           <v-alert type="error">{{ Text }}</v-alert>
         </v-card-text>
-        <v-card-text v-if="Code === 3004 || Code === 3005">
+        <v-card-text v-if="Code === 1206 || Code === 1207">
           <v-alert type="warning">{{ Text }}</v-alert>
         </v-card-text>
       </v-card>
@@ -87,7 +87,7 @@ export default {
   created() {
     /* 检查登入状态 */
     if (this.$store.state.PsssInfo === null) {
-      this.$router.push("/Account/PassCenter")
+      this.$router.push({path: "/Account/Login", query: {Href: window.location.href}})
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* 检查Oauth客户端 */
@@ -99,24 +99,20 @@ export default {
     CheckOauth() {
       Axios
           .post(this.$store.state.Config.ApiUrl + "Oauth/Check", {ClientId: this.$route.query.client_id})
-          .then(Response => (
-              this.CallBack_CheckOauth(Response.data)
-          ))
-    },
-    /* 检查Oauth客户端回调 */
-    CallBack_CheckOauth(Data) {
-      if (Data.Code === 200) {
-        this.Code = Data.Code
-        this.Data = Data.Data
-      }
-      if (Data.Code === 400 || Data.Code === 500) {
-        this.Code = Data.Code
-        this.Text = Data.Message
-      }
-      if (Data.Code === 3004 || Data.Code === 3005) {
-        this.Code = Data.Code
-        this.Text = Data.Message
-      }
+          .then(Response => {
+            if (Response.data.Code === 200) {
+              this.Code = Response.data.Code
+              this.Data = Response.data.Data
+            }
+            if (Response.data.Code === 400 || Response.data.Code === 500) {
+              this.Code = Response.data.Code
+              this.Text = Response.data.Message
+            }
+            if (Response.data.Code === 1206 || Response.data.Code === 1207) {
+              this.Code = Response.data.Code
+              this.Text = Response.data.Message
+            }
+          })
     }
   }
 }

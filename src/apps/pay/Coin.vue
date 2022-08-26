@@ -71,106 +71,100 @@
       <v-card class="mt-4">
         <v-card-title>先锋币订单</v-card-title>
         <v-card-text>
-          <v-row dense>
-            <v-col cols="12" md="12" v-if="Data === null">
-              <v-alert type="info">暂无数据</v-alert>
-            </v-col>
-            <v-expansion-panels>
-              <v-col cols="12" md="6" v-for="(Data, I) in Data" :key="I">
-                <v-expansion-panel>
-                  <v-expansion-panel-header disable-icon-rotate>
-                    #{{ Data.Id }} - {{ Data.Remark }}
-                    <template v-slot:actions>
-                      <v-chip
-                          :color="Data.Status === '0' ? 'info' : (Data.Status === '1' ? 'success' : (Data.Status === '2' ? 'error' : 'warning'))"
-                          label
-                          text-color="white">
-                        <v-icon left color="white">
-                          {{ Data.Status === "0" ? "mdi-shopping" : (Data.Status === "1" ? "mdi-check" : (Data.Status === "2" ? "mdi-close" : "mdi-timer")) }}
-                        </v-icon>
-                        {{ Data.Status === "0" ? "待支付" : (Data.Status === "1" ? "已完成" : (Data.Status === "2" ? "已关闭" : "已超时")) }}
-                      </v-chip>
-                    </template>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card v-if="Data.Status === '0'">
-                      <v-card-subtitle>操作</v-card-subtitle>
-                      <v-card-text>
-                        <v-btn color="info" @click="PayWindow(Data.Id)">
-                          <v-icon>mdi-shopping</v-icon>
-                          <v-span class="ml-2">支付</v-span>
-                        </v-btn>
-                      </v-card-text>
-                    </v-card>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-currency-cny</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>金额</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.Amount / 100 }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-cash-multiple</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>等级激励</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.LevelAmount === null ? "无" : Data.LevelAmount }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-store</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>支付方式</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.Type === "0" ? "微信" : "支付宝" }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-barcode</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>订单号</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.OrderId }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-barcode</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>商户号</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.MerchantId }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-timer</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>创建时间</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.CreateDate }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-timer</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>超时时间</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.ExpiredDate }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-col>
-            </v-expansion-panels>
-          </v-row>
-          <v-pagination v-model="Page" :length="PageTotal"></v-pagination>
+          <v-alert type="info" v-if="Data === null">暂无数据</v-alert>
+          <v-expansion-panels>
+            <v-expansion-panel v-for="(Data, I) in Data" :key="I">
+              <v-expansion-panel-header disable-icon-rotate>
+                #{{ Data.Id }} - {{ Data.Remark }}
+                <template v-slot:actions>
+                  <v-chip
+                      :color="Data.Status === '0' ? 'info' : (Data.Status === '1' ? 'success' : (Data.Status === '2' ? 'error' : 'warning'))"
+                      label
+                      text-color="white">
+                    <v-icon left color="white">
+                      {{ Data.Status === "0" ? "mdi-shopping" : (Data.Status === "1" ? "mdi-check" : (Data.Status === "2" ? "mdi-close" : "mdi-timer")) }}
+                    </v-icon>
+                    {{ Data.Status === "0" ? "待支付" : (Data.Status === "1" ? "已完成" : (Data.Status === "2" ? "已关闭" : "已超时")) }}
+                  </v-chip>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card v-if="Data.Status === '0'" class="mb-2">
+                  <v-card-subtitle>操作</v-card-subtitle>
+                  <v-card-text>
+                    <v-btn color="info" @click="PayWindow(Data.Id)">
+                      <v-icon>mdi-shopping</v-icon>
+                      <v-span class="ml-2">支付</v-span>
+                    </v-btn>
+                  </v-card-text>
+                </v-card>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-currency-cny</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>金额</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.Amount / 100 }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-cash-multiple</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>等级激励</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.LevelAmount === null ? "无" : Data.LevelAmount }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-store</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>支付方式</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.Type === "0" ? "微信" : "支付宝" }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-barcode</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>订单号</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.OrderId }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-barcode</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>商户号</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.MerchantId }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-timer</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>创建时间</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.CreateDate }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-timer</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>超时时间</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.ExpiredDate }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <v-pagination class="mt-4" v-model="Page" :length="PageTotal"></v-pagination>
         </v-card-text>
       </v-card>
     </v-container>
@@ -195,10 +189,11 @@ export default {
   created() {
     /* 检查登入状态 */
     if (this.$store.state.PsssInfo === null) {
-      this.$router.push("/Account/Login")
+      this.$router.push({path: "/Account/Login", query: {Href: window.location.href}})
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* 订单列表 */
+    this.OrderList()
     this.Timer = setInterval(this.OrderList, 1000)
   },
 
@@ -207,20 +202,16 @@ export default {
   },
 
   methods: {
-    /* 订单列表 */
+    /* 获取订单列表 */
     OrderList() {
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Pay/List", {Page: this.Page})
-          .then(Response => (
-              this.CallBack_OrderList(Response.data)
-          ))
-    },
-    /* 订单列表回调 */
-    CallBack_OrderList(Data) {
-      if (Data.Data !== null) {
-        this.PageTotal = Math.ceil(Data.Data[0].Total / 10)
-      }
-      this.Data = Data.Data
+          .then(Response => {
+            if (Response.data.Data !== null) {
+              this.PageTotal = Math.ceil(Response.data.Data[0].Total / 10)
+            }
+            this.Data = Response.data.Data
+          })
     },
     /* 支付窗口 */
     PayWindow(Id) {
@@ -240,25 +231,21 @@ export default {
       this.Disabled = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Pay/WeChatPay", {Amount: this.Amount})
-          .then(Response => (
-              this.CallBack_WeChat(Response.data)
-          ))
-    },
-    /* 微信支付回调 */
-    CallBack_WeChat(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 2000) {
-        this.Disabled = false
-        this.PayWindow(Data.Data.Id)
-      }
-      if (Data.Code === 2007 || Data.Code === 2008) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1100) {
+              this.Disabled = false
+              this.PayWindow(Response.data.Data.Id)
+            }
+            if (Response.data.Code === 1001 || Response.data.Code === 1101 || Response.data.Code === 1102) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+          })
     }
   },
 

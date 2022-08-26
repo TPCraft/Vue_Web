@@ -4,120 +4,112 @@
       <v-card>
         <v-card-title>OauthClient</v-card-title>
         <v-card-text>
-          <v-row dense>
-            <v-col cols="12" md="12">
-              <v-card>
-                <v-card-subtitle>操作</v-card-subtitle>
-                <v-card-text>
-                  <v-btn color="primary" @click="AddDialog = true">
-                    <v-icon>mdi-plus</v-icon>
-                    <span class="ml-2">添加</span>
-                  </v-btn>
-                </v-card-text>
-              </v-card>
-            </v-col>
-            <v-col cols="12" md="12" v-if="Data === null">
-              <v-alert type="info">暂无数据</v-alert>
-            </v-col>
-            <v-expansion-panels>
-              <v-col cols="12" md="6" v-for="(Data, I) in Data" :key="I">
-                <v-expansion-panel>
-                  <v-expansion-panel-header disable-icon-rotate>
-                    {{ Data.Name }}
-                    <template v-slot:actions>
-                      <v-chip
-                          :color="Data.Status === '0' ? 'warning' : 'success'"
-                          label
-                          text-color="white">
-                        <v-icon left color="white">
-                          {{ Data.Status === "0" ? "mdi-timer" : "mdi-checkbox-marked" }}
-                        </v-icon>
-                        {{ Data.Status === "0" ? "审核中" : "已审核" }}
-                      </v-chip>
-                    </template>
-                  </v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card>
-                      <v-card-subtitle>操作</v-card-subtitle>
-                      <v-card-text>
-                        <v-btn color="primary" @click="OpenEditDialog(I)">
-                          <v-icon>mdi-pencil</v-icon>
-                          <span class="ml-2">修改</span>
+          <v-card class="mb-4">
+            <v-card-subtitle>操作</v-card-subtitle>
+            <v-card-text>
+              <v-btn color="primary" @click="AddDialog = true">
+                <v-icon>mdi-plus</v-icon>
+                <span class="ml-2">添加</span>
+              </v-btn>
+            </v-card-text>
+          </v-card>
+          <v-alert type="info" v-if="Data === null">暂无数据</v-alert>
+          <v-expansion-panels>
+            <v-expansion-panel v-for="(Data, I) in Data" :key="I">
+              <v-expansion-panel-header disable-icon-rotate>
+                {{ Data.Name }}
+                <template v-slot:actions>
+                  <v-chip
+                      :color="Data.Status === '0' ? 'warning' : 'success'"
+                      label
+                      text-color="white">
+                    <v-icon left color="white">
+                      {{ Data.Status === "0" ? "mdi-timer" : "mdi-checkbox-marked" }}
+                    </v-icon>
+                    {{ Data.Status === "0" ? "审核中" : "已审核" }}
+                  </v-chip>
+                </template>
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-card class="mb-2">
+                  <v-card-subtitle>操作</v-card-subtitle>
+                  <v-card-text>
+                    <v-btn color="primary" @click="OpenEditDialog(I)">
+                      <v-icon>mdi-pencil</v-icon>
+                      <span class="ml-2">修改</span>
+                    </v-btn>
+                  </v-card-text>
+                </v-card>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-img :src="Data.Logo"/>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>名称</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.Name }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-link</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>回调地址</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.RedirectUrl }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="Data.RedirectUrl">
+                          <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
                         </v-btn>
-                      </v-card-text>
-                    </v-card>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-img :src="Data.Logo"/>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>名称</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.Name }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-cash-multiple</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>回调地址</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.RedirectUrl }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-tooltip bottom>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="Data.RedirectUrl">
-                              <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>复制回调地址</span>
-                        </v-tooltip>
-                      </v-list-item-action>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-identifier</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>ClientId</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.ClientId }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-tooltip bottom>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="Data.ClientId">
-                              <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>复制ClientId</span>
-                        </v-tooltip>
-                      </v-list-item-action>
-                    </v-list-item>
-                    <v-list-item>
-                      <v-list-item-avatar>
-                        <v-icon>mdi-barcode</v-icon>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>ClientSecret</v-list-item-title>
-                        <v-list-item-subtitle>{{ Data.ClientSecret }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                      <v-list-item-action>
-                        <v-tooltip bottom>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="Data.ClientSecret">
-                              <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
-                            </v-btn>
-                          </template>
-                          <span>复制ClientSecret</span>
-                        </v-tooltip>
-                      </v-list-item-action>
-                    </v-list-item>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-col>
-            </v-expansion-panels>
-          </v-row>
-          <v-pagination v-model="Page" :length="PageTotal"></v-pagination>
+                      </template>
+                      <span>复制回调地址</span>
+                    </v-tooltip>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-identifier</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>ClientId</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.ClientId }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="Data.ClientId">
+                          <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>复制ClientId</span>
+                    </v-tooltip>
+                  </v-list-item-action>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-avatar>
+                    <v-icon>mdi-barcode</v-icon>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <v-list-item-title>ClientSecret</v-list-item-title>
+                    <v-list-item-subtitle>{{ Data.ClientSecret }}</v-list-item-subtitle>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <v-tooltip bottom>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on" v-clipboard:copy="Data.ClientSecret">
+                          <v-icon>mdi-checkbox-multiple-blank-outline</v-icon>
+                        </v-btn>
+                      </template>
+                      <span>复制ClientSecret</span>
+                    </v-tooltip>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+          <v-pagination class="mt-4" v-model="Page" :length="PageTotal"></v-pagination>
         </v-card-text>
       </v-card>
       <v-dialog
@@ -168,7 +160,7 @@
           persistent
           max-width="600px">
         <v-card>
-          <v-card-title>添加OauthClient</v-card-title>
+          <v-card-title>修改OauthClient</v-card-title>
           <v-card-text>
             <v-text-field
                 v-model="OauthClientEditData.Name"
@@ -240,7 +232,7 @@ export default {
   created() {
     /* 检查登入状态 */
     if (this.$store.state.PsssInfo === null) {
-      this.$router.push("/Account/Login")
+      this.$router.push({path: "/Account/Login", query: {Href: window.location.href}})
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* OauthClient列表 */

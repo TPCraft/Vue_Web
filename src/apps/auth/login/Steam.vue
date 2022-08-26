@@ -16,7 +16,7 @@
             <v-card-text v-if="Code === 1000">
               <v-alert type="success">{{ Text }}</v-alert>
             </v-card-text>
-            <v-card-text v-if="Code === 1020 || Code === 1027">
+            <v-card-text v-if="Code === 1219 || Code === 1220">
               <v-alert type="warning">{{ Text }}</v-alert>
             </v-card-text>
           </v-card>
@@ -52,34 +52,28 @@ export default {
     Login() {
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Login/Steam", this.$route.query)
-          .then(Response => (
-              this.CallBack_Login(Response.data)
-          ))
-    },
-    /* 登入回调 */
-    CallBack_Login(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 400) {
-        this.Code = Data.Code
-        this.Text = Data.Message
-      }
-      if (Data.Code === 500) {
-        this.Code = Data.Code
-        this.Text = Data.Message
-      }
-      if (Data.Code === 1000) {
-        this.Code = Data.Code
-        this.Text = Data.Message
-        this.$cookies.remove("Token", "/", "tpcraft.cn")
-        this.$cookies.remove("flarum_remember", "/", "tpcraft.cn")
-        this.$cookies.set("Token", Data.Data.Token, "7d", "/", "tpcraft.cn")
-        this.$cookies.set("flarum_remember", Data.Data.CommunityToken, "7d", "/", "tpcraft.cn")
-        setTimeout(() => (window.location.href = "/Account/PassCenter"), 3000)
-      }
-      if (Data.Code === 1020 || Data.Code === 1027) {
-        this.Code = Data.Code
-        this.Text = Data.Message
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 400) {
+              this.Code = Response.data.Code
+              this.Text = Response.data.Message
+            }
+            if (Response.data.Code === 500) {
+              this.Code = Response.data.Code
+              this.Text = Response.data.Message
+            }
+            if (Response.data.Code === 1000) {
+              this.Code = Response.data.Code
+              this.Text = Response.data.Message
+              this.$cookies.remove("Token", "/", "tpcraft.cn")
+              this.$cookies.set("Token", Response.data.Data.Token, "7d", "/", "tpcraft.cn")
+              setTimeout(() => (window.location.href = "/Account/PassCenter"), 3000)
+            }
+            if (Response.data.Code === 1219 || Response.data.Code === 1220) {
+              this.Code = Response.data.Code
+              this.Text = Response.data.Message
+            }
+          })
     }
   }
 }

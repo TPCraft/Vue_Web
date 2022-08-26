@@ -19,7 +19,7 @@
                   {{ Data.Game }} - #{{ Data.Server }}
                 </v-card-subtitle>
                 <v-card-text>
-                  请在 <span class="error--text">{{ (Date.parse(new Date(Data.ExpiredDate)) - Date.parse(new Date())) / 1000 }}</span> 秒内完成登入
+                  请在 <span class="info--text">{{ (Date.parse(new Date(Data.ExpiredDate)) - Date.parse(new Date())) / 1000 }}</span> 秒内完成登入
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -67,10 +67,11 @@ export default {
   created() {
     /* 检查登入状态 */
     if (this.$store.state.PsssInfo === null) {
-      this.$router.push("/Account/Login")
+      this.$router.push({path: "/Account/Login", query: {Href: window.location.href}})
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* 登入列表 */
+    this.LoginList()
     this.Timer = setInterval(this.LoginList, 1000)
   },
 
@@ -83,64 +84,52 @@ export default {
     LoginList() {
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Game/List", {Page: this.Page})
-          .then(Response => (
-              this.CallBack_LoginList(Response.data)
-          ))
-    },
-    /* 登入列表回调 */
-    CallBack_LoginList(Data) {
-      if (Data.Data !== null) {
-        this.PageTotal = Math.ceil(Data.Data[0].Total / 9)
-      }
-      this.Data = Data.Data
+          .then(Response => {
+            if (Response.data.Data !== null) {
+              this.PageTotal = Math.ceil(Response.data.Data[0].Total / 9)
+            }
+            this.Data = Response.data.Data
+          })
     },
     /* 登入 */
     Login(Id) {
       this.Disabled = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Game/Login", {Id: Id})
-          .then(Response => (
-              this.CallBack_Login(Response.data)
-          ))
-    },
-    /* 登入回调 */
-    CallBack_Login(Data) {
-      if (Data.Code === 500) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 4001) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 4002) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            if (Response.data.Code === 500) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1209) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1210) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     },
     /* 取消登入 */
     Cancel(Id) {
       this.Disabled = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Game/Cancel", {Id: Id})
-          .then(Response => (
-              this.CallBack_Cancel(Response.data)
-          ))
-    },
-    /* 登入回调 */
-    CallBack_Cancel(Data) {
-      if (Data.Code === 500) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 4001) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 4003) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            if (Response.data.Code === 500) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1209) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1211) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     }
   }
 }

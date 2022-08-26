@@ -416,9 +416,9 @@ export default {
     PassInfo() {
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/GetPassInfo", {Mode: "Token"})
-          .then(Response => (
-              this.$store.commit("Update_PassInfo", Response.data.Data)
-          ))
+          .then(Response => {
+            this.$store.commit("Update_PassInfo", Response.data.Data)
+          })
     },
     /* 提示框 */
     Snackbar_Update(Data) {

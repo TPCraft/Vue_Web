@@ -82,7 +82,7 @@ export default {
   created() {
     /* 检查登入状态 */
     if (this.$store.state.PsssInfo !== null) {
-      this.$router.push("/Account/PassCenter")
+      this.$router.push("/Account/PassCenter");
       this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: "已登入通行证"})
     }
   },
@@ -93,28 +93,26 @@ export default {
       this.LoginData.Disabled = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/Login", this.LoginData.Data)
-          .then(Response => (
-              this.CallBack_Login(Response.data)
-          ))
-    },
-    /* 登入回调 */
-    CallBack_Login(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1000) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-        this.$cookies.remove("Token", "/", "tpcraft.cn")
-        this.$cookies.remove("flarum_remember", "/", "tpcraft.cn")
-        this.$cookies.set("Token", Data.Data.Token, "7d", "/", "tpcraft.cn")
-        this.$cookies.set("flarum_remember", Data.Data.CommunityToken, "7d", "/", "tpcraft.cn")
-        setTimeout(() => (window.location.href = "/Account/PassCenter"), 3000)
-      }
-      if (Data.Code === 1003) {
-        this.LoginData.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1000) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+              this.$cookies.remove("Token", "/", "tpcraft.cn")
+              this.$cookies.set("Token", Response.data.Data.Token, "7d", "/", "tpcraft.cn")
+              if (this.$route.query.Href === null || this.$route.query.Href === "") {
+                setTimeout(() => ("/Account/PassCenter"), 3000)
+              } else {
+                setTimeout(() => (window.location.href = this.$route.query.Href), 3000)
+              }
+            }
+            if (Response.data.Code === 1003) {
+              this.LoginData.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+          })
     }
   }
 }

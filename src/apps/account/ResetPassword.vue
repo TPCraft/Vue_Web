@@ -182,73 +182,61 @@ export default {
       this.ReSendEmailCodeBtn.Disabled = true
       Axios
           .get(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ReSendEmailCode")
-          .then(Response => (
-              this.CallBack_ReSendEmailCode(Response.data)
-          ))
-    },
-    /* 重新发送邮箱验证码回调 */
-    CallBack_ReSendEmailCode(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 406) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 1023) {
-        this.ReSendEmailCodeBtn.Timer = 60
-        this.ReSendEmailCode_Timer()
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 406) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1005) {
+              this.ReSendEmailCodeBtn.Timer = 60
+              this.ReSendEmailCode_Timer()
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     },
     /* 重置密码第一步 */
     ResetPassword_Step1() {
       this.ResetPasswordData.Disabled_Step1 = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step1)
-          .then(Response => (
-              this.CallBack_ResetPassword_Step1(Response.data)
-          ))
-    },
-    /* 重置密码第一步回调 */
-    CallBack_ResetPassword_Step1(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.ResetPasswordData.Disabled_Step1 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1020) {
-        this.ResetPasswordData.Disabled_Step1 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 1023) {
-        this.Step++
-        this.ReSendEmailCodeBtn.Disabled = true
-        this.ReSendEmailCode_Timer()
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.ResetPasswordData.Disabled_Step1 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1021) {
+              this.ResetPasswordData.Disabled_Step1 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1005) {
+              this.Step++
+              this.ReSendEmailCodeBtn.Disabled = true
+              this.ReSendEmailCode_Timer()
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     },
     /* 重置密码第二步 */
     ResetPassword_Step2() {
       this.ResetPasswordData.Disabled_Step2 = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ResetPassword", this.ResetPasswordData.Data.Step2)
-          .then(Response => (
-              this.CallBack_ResetPassword_Step2(Response.data)
-          ))
-    },
-    /* 重置密码第二步回调 */
-    CallBack_ResetPassword_Step2(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.ResetPasswordData.Disabled_Step2 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1013) {
-        this.ResetPasswordData.Disabled_Step2 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 1014) {
-        this.Step++
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.ResetPasswordData.Disabled_Step2 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1007 || Response.data.Code === 1008 || Response.data.Code === 1006) {
+              this.ResetPasswordData.Disabled_Step2 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1016) {
+              this.Step++
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     }
   }
 }

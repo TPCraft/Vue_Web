@@ -203,74 +203,62 @@ export default {
       this.ReSendEmailCodeBtn.Disabled = true
       Axios
           .get(this.$store.state.Config.ApiUrl + "Tpcraft/Account/ReSendEmailCode")
-          .then(Response => (
-              this.CallBack_ReSendEmailCode(Response.data)
-          ))
-    },
-    /* 重新发送邮箱验证码回调 */
-    CallBack_ReSendEmailCode(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 406) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 1023) {
-        this.ReSendEmailCodeBtn.Timer = 60
-        this.ReSendEmailCode_Timer()
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 406) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1005) {
+              this.ReSendEmailCodeBtn.Timer = 60
+              this.ReSendEmailCode_Timer()
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     },
     /* 注册第一步 */
     Register_Step1() {
       this.RegisterData.Disabled_Step1 = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/Register", this.RegisterData.Data.Step1)
-          .then(Response => (
-              this.CallBack_Register_Step1(Response.data)
-          ))
-    },
-    /* 注册第一步回调 */
-    CallBack_Register_Step1(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.RegisterData.Disabled_Step1 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1005 || Data.Code === 1006 || Data.Code === 1007 || Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010) {
-        this.RegisterData.Disabled_Step1 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 1023) {
-        this.Step++
-        this.ReSendEmailCodeBtn.Disabled = true
-        this.ReSendEmailCode_Timer()
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.RegisterData.Disabled_Step1 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1009 || Response.data.Code === 1010 || Response.data.Code === 1011 || Response.data.Code === 1012 || Response.data.Code === 1013 || Response.data.Code === 1014) {
+              this.RegisterData.Disabled_Step1 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1005) {
+              this.Step++
+              this.ReSendEmailCodeBtn.Disabled = true
+              this.ReSendEmailCode_Timer()
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     },
     /* 注册第二步 */
     Register_Step2() {
       this.RegisterData.Disabled_Step2 = true
       Axios
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/Register", this.RegisterData.Data.Step2)
-          .then(Response => (
-              this.CallBack_Register_Step2(Response.data)
-          ))
-    },
-    /* 注册第二步回调 */
-    CallBack_Register_Step2(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.RegisterData.Disabled_Step2 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1008 || Data.Code === 1009 || Data.Code === 1010 || Data.Code === 1011 || Data.Code === 1012 || Data.Code === 1013) {
-        this.RegisterData.Disabled_Step2 = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
-      if (Data.Code === 1004) {
-        this.Step++
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.RegisterData.Disabled_Step2 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1007 || Response.data.Code === 1008 || Response.data.Code === 1006 || Response.data.Code === 1012 || Response.data.Code === 1013 || Response.data.Code === 1014) {
+              this.RegisterData.Disabled_Step2 = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1015) {
+              this.Step++
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     }
   }
 }
-</script>\
+</script>

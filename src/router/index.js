@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import InDevelopment from '../views/InDevelopment'
-import Error from '../views/Error'
 
 import Www_Home from '../apps/www/Home'
 
@@ -33,11 +32,6 @@ const Routes = [
     path: '/',
     component: Www_Home,
     meta: {title: "TPCraft 时代先锋"}
-  },
-  {
-    path: '/Error',
-    component: Error,
-    meta: {title: "错误 - TPCraft 时代先锋"}
   },
   {
     path: '/InDevelopment',
@@ -102,7 +96,7 @@ const Routes = [
   {
     path: '/Auth/Oauth/Client',
     component: Auth_Oauth_Client,
-    meta: {title: "ClienOautht - 互联 | TPCraft 时代先锋"}
+    meta: {title: "OauthClient - 互联 | TPCraft 时代先锋"}
   },
   {
     path: '/Auth/Oauth/Authorize',

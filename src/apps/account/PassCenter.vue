@@ -407,24 +407,24 @@
           </v-toolbar>
           <v-card-text>
             <v-alert
-                v-if="$store.state.PsssInfo.Ban.History === null"
+                v-if="$store.state.PsssInfo.Ban.Info === null"
                 type="info" class="mt-4">
               暂无数据
             </v-alert>
-            <v-timeline v-if="$store.state.PsssInfo.Ban.History !== null" dense>
+            <v-timeline v-if="$store.state.PsssInfo.Ban.Info !== null" dense>
               <v-slide-x-reverse-transition group hide-on-leave>
                 <v-timeline-item
-                    v-for="(BanInfo, I) in $store.state.PsssInfo.Ban.History" :key="I"
+                    v-for="(Info, I) in $store.state.PsssInfo.Ban.Info" :key="I"
                     small fill-dot>
                   <v-card>
-                    <v-card-title>#{{ BanInfo.Id }}</v-card-title>
+                    <v-card-title>#{{ Info.Id }}</v-card-title>
                     <v-card-subtitle>
-                      封禁时间 {{ BanInfo.Date }}
+                      封禁时间 {{ Info.Date }}
                       <br/>
-                      解封时间 {{ BanInfo.ExpiredDate == "1970-01-01 07:59:59" ? "永久封禁" : BanInfo.ExpiredDate }}
+                      解封时间 {{ Info.ExpiredDate == "1970-01-01 07:59:59" ? "永久封禁" : Info.ExpiredDate }}
                     </v-card-subtitle>
                     <v-card-text>
-                      <h3>{{ BanInfo.Reason }}</h3>
+                      <h3>{{ Info.Reason }}</h3>
                     </v-card-text>
                   </v-card>
                 </v-timeline-item>
@@ -551,39 +551,31 @@ export default {
     Signin() {
       Axios
           .post(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/Signin", {Mode: "Api"})
-          .then(Response => (
-              this.CallBack_Signin(Response.data)
-          ))
-    },
-    /* 签到回调 */
-    CallBack_Signin(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1021) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message + "，本次签到获得 " + Data.Data.Exp + " Exp"})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1017) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message + "，本次签到获得 " + Response.data.Data.Exp + " Exp"})
+            }
+          })
     },
     /* Qq验证 */
     QqVerify() {
       Axios
           .get(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/QqVerify")
-          .then(Response => (
-              this.CallBack_QqVerify(Response.data)
-          ))
-    },
-    /* QQ验证回调 */
-    CallBack_QqVerify(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 200) {
-        this.QqVerifyData.VerifyCode = Data.Data.VerifyCode
-        this.QqVerifyData.ExpiredDate = Data.Data.ExpiredDate
-        this.QqVerifyDialog = true
-      }
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 1025) {
+              this.QqVerifyData.VerifyCode = Response.data.Data.VerifyCode
+              this.QqVerifyData.ExpiredDate = Response.data.Data.ExpiredDate
+              this.QqVerifyDialog = true
+            }
+            if (Response.data.Code === 500) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+          })
     },
     /* 绑定Steam */
     BindSteam() {
@@ -624,46 +616,38 @@ export default {
         UploadData.append("File", new File([u8arr], "Avatar.png", { type: mime }))
         Axios
             .post(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/UploadAvatar", UploadData)
-            .then(Response => (
-                this.CallBack_UploadAvatar(Response.data)
-            ))
+            .then(Response => {
+              /* 检查响应数据 */
+              if (Response.data.Code === 500) {
+                this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+              }
+              if (Response.data.Code === 1300) {
+                this.UploadAvatarData.Data = null
+                this.UploadAvatarData.Preview = null
+                this.ChangeAvatarDialog = false
+                this.Disabled = false
+                this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+              }
+              if (Response.data.Code === 1302 || Response.data.Code === 1303 || Response.data.Code === 1301) {
+                this.Disabled = false
+                this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+              }
+            })
       })
-    },
-    /* 上传头像回调 */
-    CallBack_UploadAvatar(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 5000) {
-        this.UploadAvatarData.Data = null
-        this.UploadAvatarData.Preview = null
-        this.ChangeAvatarDialog = false
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
-      if (Data.Code === 5001 || Data.Code === 5002 || Data.Code === 5003) {
-        this.Disabled = false
-        this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Data.Message})
-      }
     },
     /* 重置访问密钥 */
     ResetAccessKey() {
       Axios
           .get(this.$store.state.Config.ApiUrl + "/Tpcraft/Account/ResetAccessKey")
-          .then(Response => (
-              this.CallBack_ResetAccessKey(Response.data)
-          ))
-    },
-    /* 重置访问密钥回调 */
-    CallBack_ResetAccessKey(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1017) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1019) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+          })
     }
   }
 }

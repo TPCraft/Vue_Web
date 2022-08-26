@@ -34,20 +34,16 @@ export default {
     LoginOut() {
       Axios
           .get(this.$store.state.Config.ApiUrl + "Tpcraft/Account/LoginOut")
-          .then(Response => (
-              this.CallBack_LoginOut(Response.data)
-          ))
-    },
-    /* 登出回调 */
-    CallBack_LoginOut(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
-      if (Data.Code === 1002) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Data.Message})
-        setTimeout(() => (window.location.href = "/Account/Login"), 3000)
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1002) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+              setTimeout(() => (window.location.href = "/Account/Login"), 3000)
+            }
+          })
     }
   }
 }

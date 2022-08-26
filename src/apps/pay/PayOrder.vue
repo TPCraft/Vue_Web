@@ -78,7 +78,7 @@ export default {
   created() {
     /* 检查登入状态 */
     if (this.$store.state.PsssInfo === null) {
-      this.$router.push("/Account/Login")
+      this.$router.push({path: "/Account/Login", query: {Href: window.location.href}})
       this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
     }
     /* 订单信息 */

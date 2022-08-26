@@ -44,20 +44,16 @@ export default {
     ServerStatus() {
       Axios
           .get(this.$store.state.Config.ApiUrl + "Tpcraft/Www/View/ServerStatus")
-          .then(Response => (
-              this.CallBack_ServerStatus(Response.data)
-          ))
-    },
-    /* 获取服务器信息回调 */
-    CallBack_ServerStatus(Data) {
-      /* 检查响应数据 */
-      if (Data.Code === 200) {
-        this.Data = Data.Data
-        setTimeout(this.Echarts, 1000)
-      }
-      if (Data.Code === 500) {
-        this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Data.Message})
-      }
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 200) {
+              this.Data = Response.data.Data
+              setTimeout(this.Echarts, 100)
+            }
+            if (Response.data.Code === 500) {
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+          })
     },
     /* 绘制图表 */
     Echarts() {
