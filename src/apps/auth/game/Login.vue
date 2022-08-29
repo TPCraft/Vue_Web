@@ -43,7 +43,7 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-pagination v-model="Page" :length="PageTotal" class="mt-2"></v-pagination>
+          <v-pagination class="mt-4" v-model="Page" :length="PageTotal" total-visible="6"></v-pagination>
         </v-card-text>
       </v-card>
     </v-container>

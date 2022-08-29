@@ -2,15 +2,19 @@
   <div>
     <v-container>
       <v-card>
-        <v-card-title>服务器</v-card-title>
+        <v-card-title>服务器状态</v-card-title>
         <v-card-text>
           <v-alert  v-if="Data === null" type="info">暂无数据</v-alert>
-          <v-card v-for="(Data, I) in Data" :key="I" class="mb-4">
-            <v-card-title>{{ Data.Server }}</v-card-title>
-            <v-card-text>
-              <div style="height:350px" :id="'Echarts_' + I"></div>
-            </v-card-text>
-          </v-card>
+          <v-row>
+            <v-col cols="12" md="6" v-for="(Data, I) in Data" :key="I">
+              <v-card>
+                <v-card-title>{{ Data.Server }}</v-card-title>
+                <v-card-text>
+                  <div style="height:350px" :id="'Echarts_' + I"></div>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-container>
@@ -48,7 +52,7 @@ export default {
             /* 检查响应数据 */
             if (Response.data.Code === 200) {
               this.Data = Response.data.Data
-              setTimeout(this.Echarts, 100)
+              setTimeout(this.Echarts, 1000)
             }
             if (Response.data.Code === 500) {
               this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
@@ -58,8 +62,7 @@ export default {
     /* 绘制图表 */
     Echarts() {
       const Data = this.Data
-      for(let I = 0; Data.length > I; I++) {
-
+      for (let I = 0; Data.length > I; I++) {
         //获取时间
         const Date = []
         for (let A = 0; Data[I]['SystemInfo'].length > A; A++) {
@@ -87,10 +90,11 @@ export default {
         //获取网络下行
         const NetworkDown = []
         for (let E = 0; Data[I]['SystemInfo'].length > E; E++) {
-          NetworkDown.push(Data[I]['SystemInfo'][E]['NetworkDown'])
+          NetworkDown.push(Data[I]['SystemInfo'][E ]['NetworkDown'])
         }
 
-        var Chart = Echarts.init(document.getElementById("Echarts_" + I));
+        const Chart = Echarts.init(document.getElementById("Echarts_" + I));
+
         Chart.setOption({
           animationDuration: 1000,
           tooltip: {

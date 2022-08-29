@@ -8,7 +8,7 @@ const Store = new Vuex.Store({
     Loading: false,
     Config: {
       AppUrl: "https://tpcraft.cn/",
-      ApiUrl: "https://api.tpcraft.cn/"
+      ApiUrl: "https://dev.tpcraft.cn/"
     },
     PsssInfo: null
   },

@@ -56,7 +56,7 @@
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
-          <v-pagination class="mt-4" v-model="Page" :length="PageTotal"></v-pagination>
+          <v-pagination class="mt-4" v-model="Page" :length="PageTotal" total-visible="6"></v-pagination>
         </v-card-text>
       </v-card>
     </v-container>

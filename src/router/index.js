@@ -4,8 +4,8 @@ import VueRouter from 'vue-router'
 import InDevelopment from '../views/InDevelopment'
 
 import Www_Home from '../apps/www/Home'
+import Www_View_ServerStatus from '../apps/www/ServerStatus'
 
-import Account_View_Server from '../apps/www/ServerStatus'
 import Account_View_BanList from '../apps/account/view/BanList'
 
 import Account_Login from '../apps/account/Login'
@@ -24,6 +24,9 @@ import Auth_Oauth_Client from '../apps/auth/oauth/Client'
 import Pay_Coin from '../apps/pay/Coin'
 import Pay_PayOrder from '../apps/pay/PayOrder'
 
+import Admin_Home from '../apps/admin/Home'
+import Admin_Pass from '../apps/admin/pass/List'
+import Admin_Order from '../apps/admin/order/List'
 
 Vue.use(VueRouter)
 
@@ -39,9 +42,9 @@ const Routes = [
     meta: {title: "开发中 - TPCraft 时代先锋"}
   },
   {
-    path: '/Server',
-    component: Account_View_Server,
-    meta: {title: "服务器 - TPCraft 时代先锋"}
+    path: '/ServerStatus',
+    component: Www_View_ServerStatus,
+    meta: {title: "服务器状态 - TPCraft 时代先锋"}
   },
   {
     path: '/Account/BanList',
@@ -112,6 +115,21 @@ const Routes = [
     path: '/Pay/PayOrder',
     component: Pay_PayOrder,
     meta: {title: "支付订单 - 支付 | TPCraft 时代先锋"}
+  },
+  {
+    path: '/Admin/Home',
+    component: Admin_Home,
+    meta: {title: "仪盘表 - 管理 | TPCraft 时代先锋"}
+  },
+  {
+    path: '/Admin/Pass',
+    component: Admin_Pass,
+    meta: {title: "通行证 - 管理 | TPCraft 时代先锋"}
+  },
+  {
+    path: '/Admin/Order',
+    component: Admin_Order,
+    meta: {title: "先锋币订单 - 管理 | TPCraft 时代先锋"}
   }
 ]
 

@@ -59,7 +59,7 @@
                 </v-list-item-avatar>
                 <v-list-item-title>文档</v-list-item-title>
               </v-list-item>
-              <v-list-item to="/Server">
+              <v-list-item to="/ServerStatus">
                 <v-list-item-avatar>
                   <v-icon>mdi-server</v-icon>
                 </v-list-item-avatar>
@@ -70,6 +70,36 @@
                   <v-icon>mdi-cancel</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-title>封禁列表</v-list-item-title>
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+        <v-menu v-if="$store.state.PsssInfo !== null && $store.state.PsssInfo.Group > 0">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn text v-bind="attrs" v-on="on">
+              <v-icon>mdi-tune</v-icon>
+              <span class="ml-2">管理员</span>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item-group>
+              <v-list-item to="/Admin/Home">
+                <v-list-item-avatar>
+                  <v-icon>mdi-chart-bar</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>仪表盘</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/Admin/Pass">
+                <v-list-item-avatar>
+                  <v-icon>mdi-card-account-details</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>通行证</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/Admin/Order">
+                <v-list-item-avatar>
+                  <v-icon>mdi-cash-multiple</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>先锋币订单</v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -340,7 +370,7 @@
               </v-list-item-avatar>
               <v-list-item-title>文档</v-list-item-title>
             </v-list-item>
-            <v-list-item to="/Server">
+            <v-list-item to="/ServerStatus">
               <v-list-item-avatar>
                 <v-icon>mdi-server</v-icon>
               </v-list-item-avatar>
