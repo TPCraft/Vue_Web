@@ -34,6 +34,15 @@
                   <v-card-subtitle>操作</v-card-subtitle>
                   <v-card-text>
                     <v-btn
+                        v-if="Data.Status === '0'"
+                        @click="CheckClientOauth(I)"
+                        :disabled="Disabled"
+                        :loading="Disabled"
+                        color="warning" class="mr-2">
+                      <v-icon>mdi-check-all</v-icon>
+                      <span class="ml-2">审核</span>
+                    </v-btn>
+                    <v-btn
                         @click="OpenEditDialog(I)"
                         color="primary" class="mr-2">
                       <v-icon>mdi-pencil</v-icon>
@@ -312,6 +321,26 @@ export default {
             }
             if (Response.data.Code === 1404) {
               this.DeleteDialog = false
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1206) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+          })
+    },
+    /* 审核OauthClient */
+    CheckClientOauth(Id) {
+      this.Disabled = true
+      Axios
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Admin/Oauth/Check", {ClientId: this.Data[Id].ClientId})
+          .then(Response => {
+            if (Response.data.Code === 500) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1403) {
               this.Disabled = false
               this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
             }
