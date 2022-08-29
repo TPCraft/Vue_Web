@@ -415,6 +415,7 @@ export default {
             if (Response.data.Code === 1402) {
               this.EditDialog = false
               this.Disabled = false
+              this.PassEditData.Password = null
               this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
             }
           })
@@ -443,6 +444,8 @@ export default {
             if (Response.data.Code === 1405) {
               this.BanDialog = false
               this.Disabled = false
+              this.PassBanData.Reason = null
+              this.PassBanData.ExpiredDate = null
               this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
             }
           })
@@ -471,6 +474,7 @@ export default {
             if (Response.data.Code === 1406) {
               this.UnBanDialog = false
               this.Disabled = false
+              this.PassUnBanData.RemoveBanInfo = false
               this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
             }
           })
