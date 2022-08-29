@@ -283,7 +283,7 @@ export default {
               this.Disabled = false
               this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
             }
-            if (Response.data.Code === 1201) {
+            if (Response.data.Code === 1402) {
               this.EditDialog = false
               this.Disabled = false
               this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
@@ -310,7 +310,7 @@ export default {
               this.Disabled = false
               this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
             }
-            if (Response.data.Code === 1202) {
+            if (Response.data.Code === 1404) {
               this.DeleteDialog = false
               this.Disabled = false
               this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
