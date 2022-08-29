@@ -101,6 +101,12 @@
                 </v-list-item-avatar>
                 <v-list-item-title>先锋币订单</v-list-item-title>
               </v-list-item>
+              <v-list-item to="/Admin/OauthClient">
+                <v-list-item-avatar>
+                  <v-icon>mdi-account-network</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>OauthClient</v-list-item-title>
+              </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-menu>
@@ -411,6 +417,12 @@
                 <v-icon>mdi-cash-multiple</v-icon>
               </v-list-item-avatar>
               <v-list-item-title>先锋币订单</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/Admin/OauthClient">
+              <v-list-item-avatar>
+                <v-icon>mdi-account-network</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>OauthClient</v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list-group>
