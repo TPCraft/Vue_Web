@@ -384,6 +384,36 @@
             </v-list-item>
           </v-list-group>
         </v-list-item-group>
+        <v-list-group
+            v-if="$store.state.PsssInfo !== null && $store.state.PsssInfo.Group > 0"
+            no-action
+            prepend-icon="mdi-tune">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title>管理员</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item-group>
+            <v-list-item to="/Admin/Home">
+              <v-list-item-avatar>
+                <v-icon>mdi-chart-bar</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>仪表盘</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/Admin/Pass">
+              <v-list-item-avatar>
+                <v-icon>mdi-card-account-details</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>通行证</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/Admin/Order">
+              <v-list-item-avatar>
+                <v-icon>mdi-cash-multiple</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>先锋币订单</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list-group>
       </v-list>
     </v-navigation-drawer>
     <!-- 页面 -->

@@ -4,17 +4,16 @@
       <v-card>
         <v-card-title>OauthClient</v-card-title>
         <v-card-text>
-          <v-card class="mb-4">
-            <v-card-subtitle>操作</v-card-subtitle>
-            <v-card-text>
-              <v-btn color="primary" @click="AddDialog = true">
-                <v-icon>mdi-plus</v-icon>
-                <span class="ml-2">添加</span>
-              </v-btn>
-            </v-card-text>
-          </v-card>
-          <v-alert type="info" v-if="Data === null">暂无数据</v-alert>
-          <v-expansion-panels>
+          <v-text-field
+              v-model="Search"
+              outlined persistent-hint
+              label="搜索OauthClient"
+              hint="ClientID / 名称"
+              prepend-inner-icon="mdi-magnify-expand"
+          ></v-text-field>
+          <v-alert type="info" v-if="Data === null && NoPermission === false">暂无数据</v-alert>
+          <v-alert type="warning" v-if="NoPermission === true">权限不足</v-alert>
+          <v-expansion-panels v-if="Data !== null">
             <v-expansion-panel v-for="(Data, I) in Data" :key="I">
               <v-expansion-panel-header disable-icon-rotate>
                 {{ Data.Name }}
@@ -131,49 +130,6 @@
         </v-card-text>
       </v-card>
       <v-dialog
-          v-model="AddDialog"
-          persistent
-          max-width="600px">
-        <v-card>
-          <v-card-title>添加OauthClient</v-card-title>
-          <v-card-text>
-            <v-text-field
-                v-model="OauthClientAddData.Name"
-                outlined hide-details
-                label="名称"
-                prepend-inner-icon="mdi-tag"
-            ></v-text-field>
-            <v-text-field
-                v-model="OauthClientAddData.Logo"
-                outlined hide-details
-                label="图标" class="mt-2"
-                prepend-inner-icon="mdi-image"
-            ></v-text-field>
-            <v-text-field
-                v-model="OauthClientAddData.RedirectUrl"
-                outlined hide-details
-                label="回调地址" class="mt-2"
-                prepend-inner-icon="mdi-link"
-            ></v-text-field>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="warning" @click="AddDialog = false">
-              <v-icon>mdi-cancel</v-icon>
-              <span class="ml-2">取消</span>
-            </v-btn>
-            <v-btn
-                @click="AddOauthClient"
-                :disabled="Disabled"
-                :loading="Disabled"
-                color="success">
-              <v-icon>mdi-check</v-icon>
-              <span class="ml-2">完成</span>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog
           v-model="EditDialog"
           persistent
           max-width="600px">
@@ -250,21 +206,15 @@
 import Axios from "axios";
 
 export default {
-  name: "Client",
+  name: "List",
 
   data: () => ({
-    Data: null,
     Page: 1,
     PageTotal: 1,
+    Search: null,
     Disabled: false,
-    AddDialog: false,
     EditDialog: false,
     DeleteDialog: false,
-    OauthClientAddData: {
-      RedirectUrl: null,
-      Name: null,
-      Logo: null
-    },
     OauthClientEditData: {
       ClientId: null,
       RedirectUrl: null,
@@ -275,17 +225,15 @@ export default {
       ClientId: null,
       Name: null
     },
+    Data: null,
+    NoPermission: false,
     Timer: null
   }),
 
   created() {
-    /* 检查登入状态 */
-    if (this.$store.state.PsssInfo === null) {
-      this.$router.push({path: "/Account/Login", query: {Href: window.location.href}})
-      this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: "未登入通行证"})
-    }
-    /* OauthClient列表 */
-    this.Timer = setInterval(this.OauthClientList, 1000)
+    /* 获取订单列表 */
+    this.GetOauthClientList()
+    this.Timer = setInterval(this.GetOauthClientList, 1000)
   },
 
   destroyed() {
@@ -293,39 +241,26 @@ export default {
   },
 
   methods: {
-    /* OauthClient列表 */
-    OauthClientList() {
+    /* 获取订单列表 */
+    GetOauthClientList() {
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Oauth/List", {Page: this.Page})
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Admin/Oauth/List", {Page: this.Page, Search: this.Search})
           .then(Response => {
             /* 检查响应数据 */
-            if (Response.data.Data !== null) {
-              this.PageTotal = Math.ceil(Response.data.Data[0].Total / 10)
+            if (Response.data.Code === 200) {
+              if (Response.data.Data !== null) {
+                this.PageTotal = Math.ceil(Response.data.Data[0].Total / 20)
+              }
+              this.Data = Response.data.Data
             }
-            this.Data = Response.data.Data
-          })
-    },
-    /* 添加OauthClient */
-    AddOauthClient() {
-      this.Disabled = true
-      Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Oauth/Add", this.OauthClientAddData)
-          .then(Response => {
-            /* 检查响应数据 */
+            if (Response.data.Code === 401) {
+              this.NoPermission = true
+            }
             if (Response.data.Code === 500) {
-              this.Disabled = false
               this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
             }
-            if (Response.data.Code === 1200) {
-              this.AddDialog = false
-              this.Disabled = false
-              this.OauthClientAddData.Name = null
-              this.OauthClientAddData.Logo = null
-              this.OauthClientAddData.RedirectUrl = null
-              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
-            }
-            if (Response.data.Code === 1203 || Response.data.Code === 1204 || Response.data.Code === 1205) {
-              this.Disabled = false
+            if (Response.data.Code === 1400) {
+              this.$router.push("/")
               this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
             }
           })
@@ -342,7 +277,7 @@ export default {
     EditOauthClient() {
       this.Disabled = true
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Oauth/Edit", this.OauthClientEditData)
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Admin/Oauth/Edit", this.OauthClientEditData)
           .then(Response => {
             if (Response.data.Code === 500) {
               this.Disabled = false
@@ -369,7 +304,7 @@ export default {
     DeleteOauthClient() {
       this.Disabled = true
       Axios
-          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Auth/Oauth/Delete", this.OauthClientDeleteData)
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Admin/Oauth/Delete", this.OauthClientDeleteData)
           .then(Response => {
             if (Response.data.Code === 500) {
               this.Disabled = false

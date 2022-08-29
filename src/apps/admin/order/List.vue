@@ -11,7 +11,8 @@
               hint="订单号 / 商户单号"
               prepend-inner-icon="mdi-magnify-expand"
           ></v-text-field>
-          <v-alert type="info" v-if="Data === null">暂无数据</v-alert>
+          <v-alert type="info" v-if="Data === null && NoPermission === false">暂无数据</v-alert>
+          <v-alert type="warning" v-if="NoPermission === true">权限不足</v-alert>
           <v-expansion-panels v-if="Data !== null">
             <v-expansion-panel v-for="(Data, I) in Data" :key="I">
               <v-expansion-panel-header disable-icon-rotate>
@@ -129,6 +130,7 @@ export default {
     PageTotal: 1,
     Search: null,
     Data: null,
+    NoPermission: false,
     Timer: null
   }),
 
@@ -154,6 +156,9 @@ export default {
                 this.PageTotal = Math.ceil(Response.data.Data[0].Total / 20)
               }
               this.Data = Response.data.Data
+            }
+            if (Response.data.Code === 401) {
+              this.NoPermission = true
             }
             if (Response.data.Code === 500) {
               this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})

@@ -27,6 +27,7 @@ import Pay_PayOrder from '../apps/pay/PayOrder'
 import Admin_Home from '../apps/admin/Home'
 import Admin_Pass from '../apps/admin/pass/List'
 import Admin_Order from '../apps/admin/order/List'
+import Admin_OauthClient from '../apps/admin/oauth/List'
 
 Vue.use(VueRouter)
 
@@ -130,6 +131,11 @@ const Routes = [
     path: '/Admin/Order',
     component: Admin_Order,
     meta: {title: "先锋币订单 - 管理 | TPCraft 时代先锋"}
+  },
+  {
+    path: '/Admin/OauthClient',
+    component: Admin_OauthClient,
+    meta: {title: "OauthClient - 管理 | TPCraft 时代先锋"}
   }
 ]
 
