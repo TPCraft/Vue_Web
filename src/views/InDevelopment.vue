@@ -1,7 +1,9 @@
 <template>
   <div>
     <v-container>
-      <v-alert type="info">开发中，敬请期待！</v-alert>
+      <v-card>
+        <v-alert type="info">开发中，敬请期待！</v-alert>
+      </v-card>
     </v-container>
   </div>
 </template>
