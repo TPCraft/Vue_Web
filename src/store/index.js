@@ -17,8 +17,10 @@ const Store = new Vuex.Store({
       State.Config = Data
     },
     Update_PassInfo(State, Data) {
-      State.Loading = true
       State.PsssInfo = Data
+    },
+    Update_Loading(State) {
+      State.Loading = true
     }
   }
 })

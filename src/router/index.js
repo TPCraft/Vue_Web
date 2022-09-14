@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import InDevelopment from '../views/InDevelopment'
+import Error from '../views/Error'
 
 import Www_Home from '../apps/www/Home'
 import Www_View_ServerStatus from '../apps/www/ServerStatus'
@@ -41,6 +42,11 @@ const Routes = [
     path: '/InDevelopment',
     component: InDevelopment,
     meta: {title: "开发中 - TPCraft 时代先锋"}
+  },
+  {
+    path: '/Error',
+    component: Error,
+    meta: {title: "错误 - TPCraft 时代先锋"}
   },
   {
     path: '/ServerStatus',

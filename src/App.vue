@@ -490,6 +490,14 @@ export default {
           .post(this.$store.state.Config.ApiUrl + "Tpcraft/Account/GetPassInfo", {Mode: "Token"})
           .then(Response => {
             this.$store.commit("Update_PassInfo", Response.data.Data)
+            this.$store.commit("Update_Loading")
+            if (Response.data.Code === 500) {
+              this.$router.push("/Error")
+            }
+          })
+          .catch(() => {
+            this.$store.commit("Update_Loading")
+            this.$router.push("/Error")
           })
     },
     /* 提示框 */
