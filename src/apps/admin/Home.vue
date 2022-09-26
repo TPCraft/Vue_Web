@@ -86,29 +86,12 @@
            </v-expansion-panel>
          </v-expansion-panels>
        </v-card-text>
-       <v-card-subtitle>服务器状态</v-card-subtitle>
-       <v-card-text v-if="Data === null">
-         <v-alert type="info">暂无数据</v-alert>
-       </v-card-text>
-       <v-card-text v-if="Data !== null">
-         <v-row>
-           <v-col cols="12" md="6" v-for="(ServerInfo, I) in Data.ServerInfo" :key="I">
-             <v-card>
-               <v-card-title>{{ ServerInfo.Server }}</v-card-title>
-               <v-card-text>
-                 <div style="height:350px" :id="'Echarts_' + I"></div>
-               </v-card-text>
-             </v-card>
-           </v-col>
-         </v-row>
-       </v-card-text>
      </v-card>
    </v-container>
  </div>
 </template>
 
 <script>
-import * as Echarts from 'echarts';
 import Axios from "axios";
 
 export default {
@@ -143,7 +126,6 @@ export default {
             /* 检查响应数据 */
             if (Response.data.Code === 200) {
               this.Data = Response.data.Data
-              setTimeout(this.Echarts, 1000)
             }
             if (Response.data.Code === 500) {
               this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
@@ -153,109 +135,6 @@ export default {
               this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
             }
           })
-    },
-    /* 绘制图表 */
-    Echarts() {
-      const Data = this.Data.ServerInfo
-      for (let I = 0; Data.length > I; I++) {
-        //获取时间
-        const Date = []
-        for (let A = 0; Data[I]['SystemInfo'].length > A; A++) {
-          Date.push(Data[I]['SystemInfo'][A]['Date'])
-        }
-
-        //获取CPU使用率
-        const CpuUsed = []
-        for (let B = 0; Data[I]['SystemInfo'].length > B; B++) {
-          CpuUsed.push(Data[I]['SystemInfo'][B]['CpuUsed'])
-        }
-
-        //获取MEM使用率
-        const MemUsed = []
-        for (let C = 0; Data[I]['SystemInfo'].length > C; C++) {
-          MemUsed.push(Data[I]['SystemInfo'][C]['MemUsed'])
-        }
-
-        //获取网络上行
-        const NetworkUp = []
-        for (let D = 0; Data[I]['SystemInfo'].length > D; D++) {
-          NetworkUp.push(Data[I]['SystemInfo'][D]['NetworkUp'])
-        }
-
-        //获取网络下行
-        const NetworkDown = []
-        for (let E = 0; Data[I]['SystemInfo'].length > E; E++) {
-          NetworkDown.push(Data[I]['SystemInfo'][E]['NetworkDown'])
-        }
-
-        const Chart = Echarts.init(document.getElementById("Echarts_" + I));
-
-        Chart.setOption({
-          animationDuration: 1000,
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'cross'
-            }
-          },
-          legend: {
-            data: ['CPU', 'MEM', '上行', '下行']
-          },
-          xAxis: {
-            data: Date.reverse()
-          },
-          yAxis: [
-            {
-              name: "资源",
-              type: "value",
-              axisLabel: {
-                formatter: '%'
-              }
-            },
-            {
-              name: "网络",
-              type: "value",
-              axisLabel: {
-                formatter: 'Kb/s'
-              }
-            }
-          ],
-          series: [
-            {
-              name: 'CPU',
-              type: 'line',
-              yAxisIndex: 0,
-              data: CpuUsed.reverse(),
-              symbol: 'none',
-              smooth: true
-            },
-            {
-              name: 'MEM',
-              type: 'line',
-              yAxisIndex: 0,
-              data: MemUsed.reverse(),
-              symbol: 'none',
-              smooth: true,
-            },
-            {
-              name: '上行',
-              type: 'line',
-              yAxisIndex: 1,
-              data: NetworkUp.reverse(),
-              symbol: 'none',
-              smooth: true,
-            },
-            {
-              name: '下行',
-              type: 'line',
-              yAxisIndex: 1,
-              data: NetworkDown.reverse(),
-              symbol: 'none',
-              smooth: true,
-            }
-          ]
-        })
-      }
     }
   }
 }

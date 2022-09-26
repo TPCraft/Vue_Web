@@ -59,12 +59,6 @@
                 </v-list-item-avatar>
                 <v-list-item-title>文档</v-list-item-title>
               </v-list-item>
-              <v-list-item to="/ServerStatus">
-                <v-list-item-avatar>
-                  <v-icon>mdi-server</v-icon>
-                </v-list-item-avatar>
-                <v-list-item-title>服务器</v-list-item-title>
-              </v-list-item>
               <v-list-item to="/Account/BanList">
                 <v-list-item-avatar>
                   <v-icon>mdi-cancel</v-icon>
@@ -100,6 +94,12 @@
                   <v-icon>mdi-cash-multiple</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-title>先锋币订单</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/Admin/RedemptionCode">
+                <v-list-item-avatar>
+                  <v-icon>mdi-cash-multiple</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>先锋币兑换码</v-list-item-title>
               </v-list-item>
               <v-list-item to="/Admin/OauthClient">
                 <v-list-item-avatar>
@@ -376,12 +376,6 @@
               </v-list-item-avatar>
               <v-list-item-title>文档</v-list-item-title>
             </v-list-item>
-            <v-list-item to="/ServerStatus">
-              <v-list-item-avatar>
-                <v-icon>mdi-server</v-icon>
-              </v-list-item-avatar>
-              <v-list-item-title>服务器</v-list-item-title>
-            </v-list-item>
             <v-list-item to="/Account/BanList">
               <v-list-item-avatar>
                 <v-icon>mdi-cancel</v-icon>
@@ -417,6 +411,12 @@
                 <v-icon>mdi-cash-multiple</v-icon>
               </v-list-item-avatar>
               <v-list-item-title>先锋币订单</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/Admin/RedemptionCode">
+              <v-list-item-avatar>
+                <v-icon>mdi-cash-multiple</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>先锋币兑换码</v-list-item-title>
             </v-list-item>
             <v-list-item to="/Admin/OauthClient">
               <v-list-item-avatar>

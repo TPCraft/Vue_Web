@@ -45,7 +45,16 @@
                   prepend-inner-icon="mdi-cash-multiple"
                   hint="四舍五入(充值数额 * 等级 * 2%)"></v-text-field>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
+              <v-btn
+                  @click="Dialog = true"
+                  block
+                  color="info">
+                <v-icon>mdi-xml</v-icon>
+                <span class="ml-2">兑换码</span>
+              </v-btn>
+            </v-col>
+            <v-col cols="12" md="4">
               <v-btn
                   @click="WeChatPay"
                   :disabled="Disabled"
@@ -56,7 +65,7 @@
                 <span class="ml-2">微信</span>
               </v-btn>
             </v-col>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="4">
               <v-btn
                   disabled="disabled"
                   block
@@ -154,7 +163,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="4">
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-icon>mdi-timer</v-icon>
@@ -165,7 +174,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="4">
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-icon>mdi-timer</v-icon>
@@ -176,6 +185,17 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
+                  <v-col cols="12" md="4">
+                    <v-list-item>
+                      <v-list-item-avatar>
+                        <v-icon>mdi-timer</v-icon>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>支付时间</v-list-item-title>
+                        <v-list-item-subtitle>{{ Data.PayDate }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
                 </v-row>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -183,6 +203,37 @@
           <v-pagination class="mt-4" v-model="Page" :length="PageTotal" total-visible="6"></v-pagination>
         </v-card-text>
       </v-card>
+      <v-dialog
+          v-model="Dialog"
+          persistent
+          max-width="600px">
+        <v-card>
+          <v-card-title>兑换码</v-card-title>
+          <v-card-text>
+            <v-text-field
+                v-model="Code"
+                outlined hide-details
+                label="兑换码" class="mt-2"
+                prepend-inner-icon="mdi-xml"
+            ></v-text-field>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="warning" @click="Dialog = false">
+              <v-icon>mdi-cancel</v-icon>
+              <span class="ml-2">取消</span>
+            </v-btn>
+            <v-btn
+                @click="RedemptionCode"
+                :disabled="Disabled"
+                :loading="Disabled"
+                color="success">
+              <v-icon>mdi-check</v-icon>
+              <span class="ml-2">完成</span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -194,6 +245,8 @@ export default {
   name: "Coin",
 
   data: () => ({
+    Dialog: false,
+    Code: null,
     Amount: null,
     Disabled: false,
     Data: null,
@@ -241,6 +294,28 @@ export default {
         PayPage = window.open(this.$store.state.Config.AppUrl + "Pay/PayOrder?Id=" + Id, null, "top=" + Top + ",left=" + Left + ",width=1000,height=800")
         PayPage.open()
       }
+    },
+    RedemptionCode() {
+      this.Disabled = true
+      Axios
+          .post(this.$store.state.Config.ApiUrl + "Tpcraft/Pay/RedemptionCode", {Code: this.Code})
+          .then(Response => {
+            /* 检查响应数据 */
+            if (Response.data.Code === 500) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "error", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1109) {
+              this.Disabled = false
+              this.Dialog = false
+              this.Code = null
+              this.$emit("Snackbar_Update", {Status: true, Color: "success", Text: Response.data.Message})
+            }
+            if (Response.data.Code === 1110 || Response.data.Code === 1111) {
+              this.Disabled = false
+              this.$emit("Snackbar_Update", {Status: true, Color: "warning", Text: Response.data.Message})
+            }
+          })
     },
     /* 微信支付 */
     WeChatPay() {

@@ -86,7 +86,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="4">
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-icon>mdi-timer</v-icon>
@@ -97,7 +97,7 @@
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
-                  <v-col cols="12" md="6">
+                  <v-col cols="12" md="4">
                     <v-list-item>
                       <v-list-item-avatar>
                         <v-icon>mdi-timer</v-icon>
@@ -105,6 +105,17 @@
                       <v-list-item-content>
                         <v-list-item-title>超时时间</v-list-item-title>
                         <v-list-item-subtitle>{{ Data.ExpiredDate }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-list-item>
+                      <v-list-item-avatar>
+                        <v-icon>mdi-timer</v-icon>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>支付时间</v-list-item-title>
+                        <v-list-item-subtitle>{{ Data.PayDate }}</v-list-item-subtitle>
                       </v-list-item-content>
                     </v-list-item>
                   </v-col>
