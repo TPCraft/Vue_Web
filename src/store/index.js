@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 const Store = new Vuex.Store({
   state: {
-    Develop: true,
+    Develop: false,
     Loading: false,
     PsssInfo: null,
     Config: null
