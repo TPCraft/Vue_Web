@@ -5,12 +5,10 @@ Vue.use(Vuex)
 
 const Store = new Vuex.Store({
   state: {
+    Develop: true,
     Loading: false,
-    Config: {
-      AppUrl: "https://tpcraft.cn/",
-      ApiUrl: "https://api.tpcraft.cn/"
-    },
-    PsssInfo: null
+    PsssInfo: null,
+    Config: null
   },
   mutations: {
     Update_Config(State, Data) {

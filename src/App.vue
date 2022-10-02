@@ -53,7 +53,7 @@
           </template>
           <v-list>
             <v-list-item-group>
-              <v-list-item to="/InDevelopment">
+              <v-list-item to="/Doc/Documentation">
                 <v-list-item-avatar>
                   <v-icon>mdi-text-box</v-icon>
                 </v-list-item-avatar>
@@ -106,6 +106,12 @@
                   <v-icon>mdi-account-network</v-icon>
                 </v-list-item-avatar>
                 <v-list-item-title>OauthClient</v-list-item-title>
+              </v-list-item>
+              <v-list-item to="/Admin/Documentation">
+                <v-list-item-avatar>
+                  <v-icon>mdi-text-box</v-icon>
+                </v-list-item-avatar>
+                <v-list-item-title>文档</v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -370,7 +376,7 @@
                 <v-list-item-title>其他</v-list-item-title>
               </v-list-item-content>
             </template>
-            <v-list-item to="/InDevelopment">
+            <v-list-item to="/Doc/Documentation">
               <v-list-item-avatar>
                 <v-icon>mdi-text-box</v-icon>
               </v-list-item-avatar>
@@ -423,6 +429,12 @@
                 <v-icon>mdi-account-network</v-icon>
               </v-list-item-avatar>
               <v-list-item-title>OauthClient</v-list-item-title>
+            </v-list-item>
+            <v-list-item to="/Admin/Documentation">
+              <v-list-item-avatar>
+                <v-icon>mdi-text-box</v-icon>
+              </v-list-item-avatar>
+              <v-list-item-title>文档</v-list-item-title>
             </v-list-item>
           </v-list-item-group>
         </v-list-group>
@@ -478,9 +490,26 @@ export default {
     /* Axios设置 */
     Axios.defaults.headers.post['Authorization'] = this.$cookies.get("Token")
     Axios.defaults.headers.get['Authorization'] = this.$cookies.get("Token")
-    /* 获取通行证信息 */
-    this.PassInfo()
-    setInterval(this.PassInfo, 3000)
+    /* 获取配置文件 */
+    if (this.$store.state.Develop) {
+      Axios
+          .get("/Config_Develop.json")
+          .then(Response => {
+            this.$store.commit("Update_Config", Response.data)
+            /* 获取通行证信息 */
+            this.PassInfo()
+            setInterval(this.PassInfo, 3000)
+          })
+    } else {
+      Axios
+          .get("/Config_Production.json")
+          .then(Response => {
+            this.$store.commit("Update_Config", Response.data)
+            /* 获取通行证信息 */
+            this.PassInfo()
+            setInterval(this.PassInfo, 3000)
+          })
+    }
   },
 
   methods: {

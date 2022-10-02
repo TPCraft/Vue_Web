@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import InDevelopment from '../views/InDevelopment'
 import Error from '../views/Error'
 
+import Doc_Documentation from '../apps/doc/Documentation'
+
 import Www_Home from '../apps/www/Home'
 
 import Account_View_BanList from '../apps/account/view/BanList'
@@ -29,6 +31,7 @@ import Admin_Pass from '../apps/admin/pass/List'
 import Admin_Order from '../apps/admin/order/List'
 import Admin_RedemptionCode from '../apps/admin/coin/RedemptionCode'
 import Admin_OauthClient from '../apps/admin/oauth/List'
+import Admin_Documentation from '../apps/admin/doc/Documentation'
 
 Vue.use(VueRouter)
 
@@ -47,6 +50,11 @@ const Routes = [
     path: '/Error',
     component: Error,
     meta: {title: "错误 - TPCraft 时代先锋"}
+  },
+  {
+    path: '/Doc/Documentation',
+    component: Doc_Documentation,
+    meta: {title: "文档 | TPCraft 时代先锋"}
   },
   {
     path: '/Account/BanList',
@@ -142,6 +150,11 @@ const Routes = [
     path: '/Admin/OauthClient',
     component: Admin_OauthClient,
     meta: {title: "OauthClient - 管理 | TPCraft 时代先锋"}
+  },
+  {
+    path: '/Admin/Documentation',
+    component: Admin_Documentation,
+    meta: {title: "文档 - 管理 | TPCraft 时代先锋"}
   }
 ]
 
